@@ -1,0 +1,104 @@
+<header
+  class="text-gray-600 body-font"
+  [ngClass]="{ 'text-gray-900': currentTheme, 'text-white': !currentTheme }"
+>
+  <div
+    class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"
+  >
+    <div class="flex items-center justify-between w-full md:w-auto">
+      <a
+        class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900"
+        [routerLink]="'/home'"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          class="w-10 h-10 text-white p-2 bg-blue-500 rounded-full"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+          ></path>
+        </svg>
+        <span
+          class="ml-3 text-xl"
+          [ngClass]="{
+            'text-gray-900': !themeService.currentTheme,
+            'text-white': themeService.currentTheme
+          }"
+          >Tailblocks</span
+        >
+      </a>
+    </div>
+    <nav
+      class="mt-2 md:mt-0 md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center md:block hidden"
+    >
+      <a class="mr-5 hover:text-blue-500">First Link</a>
+      <a class="mr-5 hover:text-blue-500">Second Link</a>
+      <a class="mr-5 hover:text-blue-500">Third Link</a>
+    </nav>
+    <div class="flex items-center">
+      <button
+        (click)="toggleTheme()"
+        class="relative inline-block w-14 align-middle select-none"
+      >
+        <label
+          for="theme-toggle"
+          class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"
+        ></label>
+        <span class="toggle-icon absolute top-0.5 left-1.5 text-sm">
+          <span>
+            {{ currentTheme ? "☀️" : "🌙" }}
+          </span>
+        </span>
+      </button>
+      <div
+        *ngIf="(currentUser$ | async) === null; else userSection"
+        class="ml-4"
+      >
+        <button
+          [routerLink]="'/login'"
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Sign In
+        </button>
+      </div>
+      <ng-template #userSection>
+        <div class="ml-4 flex items-center">
+          <img
+            *ngIf="profile"
+            [src]="
+              profile.imageUrl
+                ? profile.imageUrl
+                : 'assets/images-icons/default-avatar-icon.svg'
+            "
+            alt="Avatar"
+            class="rounded-full mr-4"
+            [ngClass]="{
+              'h-16 w-16 shadow-lg': profile.imageUrl,
+              'h-8 w-8': !profile.imageUrl
+            }"
+            [routerLink]="'/dashboard'"
+          />
+          <button
+            (click)="signOut()"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ml-4"
+          >
+            Sign Out
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <nav
+    class="md:hidden flex flex-wrap items-center text-base justify-center mt-4"
+  >
+    <a class="mr-5 hover:text-blue-500">First Link</a>
+    <a class="mr-5 hover:text-blue-500">Second Link</a>
+    <a class="mr-5 hover:text-blue-500">Third Link</a>
+  </nav>
+</header>

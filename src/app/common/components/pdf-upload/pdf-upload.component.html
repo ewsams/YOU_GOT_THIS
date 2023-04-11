@@ -1,0 +1,76 @@
+<div class="container mx-auto">
+  <div class="mt-10">
+    <div class="flex justify-between items-center mb-5 m-2">
+      <label
+        class="inline-block"
+        [ngClass]="{
+          'text-white': themeService.currentTheme,
+          'text-gray-900': !themeService.currentTheme
+        }"
+      >
+        <span class="mr-3">PDF Encoding:</span>
+        <select [(ngModel)]="selectedEncoding" class="py-2 px-3 text-black">
+          <option value="gpt2">gpt2</option>
+          <option value="p50k_base">p50k_base</option>
+          <option value="cl100k_base">cl100k_base</option>
+        </select>
+      </label>
+      <button
+        (click)="uploadInput.click()"
+        class="py-2 px-3 sm:text-sm bg-blue-500 text-white rounded-md"
+      >
+        Upload PDF
+      </button>
+      <button
+        (click)="resetMetrics()"
+        class="py-2 px-3 ml-3 sm:text-sm bg-blue-500 text-white rounded-md"
+      >
+        Reset PDF
+      </button>
+      <div hidden>
+        <input
+          #uploadInput
+          type="file"
+          class="mt-1 block w-full py-2 px-3 focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-black"
+          (change)="onFileSelect($event)"
+          accept="application/pdf"
+        />
+      </div>
+    </div>
+    <div
+      *ngIf="metrics"
+      class="bg-white shadow-md rounded-md p-6 m-4"
+      [ngClass]="{
+        'text-white': themeService.currentTheme,
+        'text-gray-900': !themeService.currentTheme
+      }"
+    >
+      <p class="text-xl mb-2 text-black">Uploaded PDF Metrics:</p>
+      <div class="grid grid-cols-2 gap-4 text-black">
+        <p *ngIf="metrics.pageCount">Page Count: {{ metrics.pageCount }}</p>
+        <p *ngIf="metrics.title">Title: {{ metrics.title }}</p>
+        <p *ngIf="metrics.author">Author: {{ metrics.author }}</p>
+        <p *ngIf="metrics.subject">Subject: {{ metrics.subject }}</p>
+        <p *ngIf="metrics.fileSize">File Size: {{ metrics.fileSize }} KB</p>
+        <p *ngIf="metrics.wordCount">Word Count: {{ metrics.wordCount }}</p>
+        <p *ngIf="metrics.encodingName">Encoding: {{ metrics.encodingName }}</p>
+        <p *ngIf="metrics.tokenCount">Token Count: {{ metrics.tokenCount }}</p>
+        <p *ngIf="metrics.cost">
+          Approximate Cost: {{ metrics.cost | currency : "USD" : true }}
+        </p>
+      </div>
+    </div>
+    <div *ngIf="loading" class="my-4">
+      <p>Loading PDF...</p>
+      <div
+        class="bg-gray-200 w-full h-2 rounded-lg"
+        [ngClass]="{ 'animate-pulse': loading }"
+      >
+        <div
+          class="bg-blue-500 h-2 rounded-lg"
+          [style.width.%]="progress"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>

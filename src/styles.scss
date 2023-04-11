@@ -1,1 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.dark {
+  background-color: black;
+}
+
+.light {
+  background-color: aliceblue;
+}
+
+//ANIMATIONS
+//-----GRADIENT
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-animation-light {
+  background: linear-gradient(270deg, #77cddc, #439fb8, #5bafbe);
+  background-size: 200% 200%;
+  animation: gradientAnimation 15s ease infinite;
+}
+
+.gradient-animation-dark {
+  background: linear-gradient(270deg, #0b3d91, #065a82, #0b3d91);
+  background-size: 200% 200%;
+  animation: gradientAnimation 15s ease infinite;
+}
