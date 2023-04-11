@@ -20,4 +20,25 @@ export class PdfService {
       encoding_name,
     });
   }
+
+  public async extractTextContent(pdfDoc: any): Promise<string> {
+    const totalPages = pdfDoc.numPages;
+    const pageTextPromises = [];
+
+    for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+      const page = await pdfDoc.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      const textItems = textContent.items.map((item: any) => item.str);
+      const textStr = textItems.join(' ');
+      pageTextPromises.push(textStr);
+    }
+
+    const allPagesText = await Promise.all(pageTextPromises);
+    return allPagesText.join('\n');
+  }
+
+  public countWords(text: string): number {
+    const words = text.match(/\b(\w+)\b/g);
+    return words ? words.length : 0;
+  }
 }

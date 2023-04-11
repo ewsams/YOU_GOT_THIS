@@ -15,6 +15,7 @@ import { PdfMetrics } from '../../models/pdf-metrics.model';
 export class PdfUploadComponent extends SubResolver implements OnInit {
   protected themeService = inject(ThemeService);
   private _pdfService = inject(PdfService);
+
   protected selectedEncoding = 'cl100k_base';
   protected file: File | null = null;
   protected metrics: PdfMetrics = {};
@@ -48,8 +49,8 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
       };
 
       const pdfJsDoc = await getDocument({ data: pdfBytes }).promise;
-      const textContent = await this.extractTextContent(pdfJsDoc);
-      this.metrics.wordCount = this.countWords(textContent);
+      const textContent = await this._pdfService.extractTextContent(pdfJsDoc);
+      this.metrics.wordCount = this._pdfService.countWords(textContent);
 
       const encoding_name = this.selectedEncoding;
       this._pdfService
@@ -58,8 +59,8 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
         .subscribe({
           next: (result) => {
             this.metrics.tokenCount = result.token_count;
-            this.metrics.cost = result.cost;
             this.metrics.encodingName = encoding_name;
+            this.metrics.cost = result.cost;
             this.loading = false;
           },
           error: (error) => {
@@ -74,27 +75,6 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
       }
     };
     fileReader.readAsArrayBuffer(file);
-  }
-
-  public async extractTextContent(pdfDoc: any): Promise<string> {
-    const totalPages = pdfDoc.numPages;
-    const pageTextPromises = [];
-
-    for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-      const page = await pdfDoc.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      const textItems = textContent.items.map((item: any) => item.str);
-      const textStr = textItems.join(' ');
-      pageTextPromises.push(textStr);
-    }
-
-    const allPagesText = await Promise.all(pageTextPromises);
-    return allPagesText.join('\n');
-  }
-
-  private countWords(text: string): number {
-    const words = text.match(/\b(\w+)\b/g);
-    return words ? words.length : 0;
   }
 
   protected resetMetrics(): void {

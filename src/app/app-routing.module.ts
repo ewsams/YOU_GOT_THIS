@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PdfUploadComponent } from './common/components/pdf-upload/pdf-upload.component';
 import { DashboardComponent } from './routes/components/dashboard/dashboard.component';
 import { LandingComponent } from './routes/components/landing/landing.component';
+import { PricingPlanComponent } from './routes/components/pricing-plan/pricing-plan.component';
 import { ProfileComponent } from './routes/components/profile/profile.component';
 import { UpdateProfileComponent } from './routes/components/update-profile/update-profile.component';
 
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'update-profile', component: UpdateProfileComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'upload-pdf', component: PdfUploadComponent },
+  { path: 'plans', component: PricingPlanComponent },
 ];
 
 @NgModule({

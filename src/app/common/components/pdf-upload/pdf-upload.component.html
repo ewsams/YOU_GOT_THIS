@@ -45,7 +45,7 @@
         'text-gray-900': !themeService.currentTheme
       }"
     >
-      <p class="text-xl mb-2 text-black">Uploaded PDF Metrics:</p>
+      <strong class="text-xl mb-2 text-black">Uploaded PDF Metrics:</strong>
       <div class="grid grid-cols-2 gap-4 text-black">
         <p *ngIf="metrics.pageCount">Page Count: {{ metrics.pageCount }}</p>
         <p *ngIf="metrics.title">Title: {{ metrics.title }}</p>

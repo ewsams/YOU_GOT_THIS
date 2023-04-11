@@ -1,0 +1,108 @@
+<section class="body-font overflow-hidden">
+  <div
+    class="container px-2 py-2 mx-auto"
+    [ngClass]="{
+      'text-white': themeService.currentTheme,
+      'text-gray-900': !themeService.currentTheme
+    }"
+  >
+    <div
+      class="flex flex-col text-center w-full mb-10"
+      [ngClass]="{
+        'text-white': themeService.currentTheme,
+        'text-gray-900': !themeService.currentTheme
+      }"
+    >
+      <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2">Pricing</h1>
+      <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
+        Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical.
+      </p>
+      <div
+        class="flex mx-auto border-2 border-blue-500 rounded overflow-hidden mt-6"
+      >
+        <button
+          class="py-1 px-4 bg-blue-500 text-white focus:outline-none"
+          [ngClass]="{
+            'bg-blue-500 text-white': !isAnnual,
+            'bg-gray-200 text-gray-900': isAnnual
+          }"
+          (click)="isAnnual = false"
+        >
+          Monthly
+        </button>
+        <button
+          class="py-1 px-4 focus:outline-none"
+          [ngClass]="{
+            'bg-blue-500 text-white': isAnnual,
+            'bg-gray-200 text-gray-900': !isAnnual
+          }"
+          (click)="isAnnual = true"
+        >
+          Annually
+        </button>
+      </div>
+    </div>
+    <div class="flex flex-wrap m-4">
+      <ng-container *ngFor="let plan of pricingPlans">
+        <div class="p-4 xl:w-1/4 md:w-1/2 w-full">
+          <div
+            class="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden"
+          >
+            <span
+              *ngIf="plan.title === 'PRO'"
+              class="bg-blue-500 text-white px-3 py-1 tracking-widest text-xs absolute right-0 top-0 rounded-bl"
+              >POPULAR</span
+            >
+            <h2
+              class="text-sm tracking-widest title-font mb-1 font-medium"
+              [ngClass]="{
+                'text-white': themeService.currentTheme,
+                'text-gray-900': !themeService.currentTheme
+              }"
+            >
+              {{ plan.title }}
+            </h2>
+            <h1
+              class="text-5xl pb-4 mb-4 border-b border-gray-200 leading-none"
+            >
+              {{ isAnnual ? plan.annualCost : plan.monthlyCost }}
+            </h1>
+            <ng-container *ngFor="let planDetail of plan.items">
+              <p class="flex items-center mb-2">
+                <span
+                  class="w-4 h-4 mr-2 inline-flex items-center justify-center text-white rounded-full flex-shrink-0 bg-blue-500"
+                >
+                  <svg
+                    fill="none"
+                    stroke="#FFFFFF"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    class="w-3 h-3"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M20 6L9 17l-5-5"></path>
+                  </svg> </span
+                >{{ planDetail }}
+              </p>
+            </ng-container>
+            <button
+              class="flex justify-center items-center mt-auto text-white bg-blue-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-blue-700 rounded"
+            >
+              {{ plan.buttonText }}
+            </button>
+            <p
+              class="text-xs mt-3"
+              [ngClass]="{
+                'text-white': themeService.currentTheme,
+                'text-gray-900': !themeService.currentTheme
+              }"
+            >
+              {{ plan.footer }}
+            </p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</section>
