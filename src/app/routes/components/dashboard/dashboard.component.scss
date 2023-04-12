@@ -1,0 +1,11 @@
+.dark-theme ::ng-deep .ngx-charts {
+  text {
+    fill: #fff !important;
+  }
+}
+
+.light-theme ::ng-deep .ngx-charts {
+  text {
+    fill: #000 !important;
+  }
+}

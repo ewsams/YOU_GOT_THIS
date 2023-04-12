@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ThemeService } from 'src/app/common/services/theme.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
+  protected themeService = inject(ThemeService);
   chartData = [
     { name: 'PDF 1', value: 15 },
     { name: 'PDF 2', value: 25 },

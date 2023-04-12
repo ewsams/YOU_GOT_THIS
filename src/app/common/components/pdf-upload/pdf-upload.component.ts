@@ -45,7 +45,7 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
         title: pdfDoc.getTitle(),
         author: pdfDoc.getAuthor(),
         subject: pdfDoc.getSubject(),
-        fileSize: (file.size / 1024).toFixed(2),
+        fileSize: this._pdfService.formatFileSize(file.size),
       };
 
       const pdfJsDoc = await getDocument({ data: pdfBytes }).promise;
@@ -81,5 +81,29 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
     this.metrics = {};
     this.file = null;
     this.progress = 0;
+  }
+
+  public get metricEntries(): Array<{
+    key: string;
+    value: string | number;
+    explanation: string;
+  }> {
+    return Object.entries(this.metrics).map(([key, value]) => {
+      const convertedKey = this.toTitleCase(this.splitCamelCase(key));
+      const explanation = this._pdfService.getMetricExplanation(key);
+      return { key: convertedKey, value, explanation };
+    });
+  }
+
+  private splitCamelCase(key: string): string {
+    return key.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+  }
+
+  private toTitleCase(str: string): string {
+    return str
+      .toLowerCase()
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   }
 }

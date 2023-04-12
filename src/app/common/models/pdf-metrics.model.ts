@@ -8,4 +8,5 @@ export interface PdfMetrics {
   encodingName?: string;
   tokenCount?: number;
   cost?: number;
+  explanation?: string;
 }
