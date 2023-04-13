@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PdfUploadComponent } from './common/components/pdf-upload/pdf-upload.component';
+import { AboutComponent } from './routes/components/about/about.component';
 import { DashboardComponent } from './routes/components/dashboard/dashboard.component';
 import { LandingComponent } from './routes/components/landing/landing.component';
 import { PricingPlanComponent } from './routes/components/pricing-plan/pricing-plan.component';
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'upload-pdf', component: PdfUploadComponent },
   { path: 'plans', component: PricingPlanComponent },
+  { path: 'about', component: AboutComponent },
 ];
 
 @NgModule({

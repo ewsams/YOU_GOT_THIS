@@ -12,9 +12,10 @@ import { CommonUtilModule } from './common/common-util.module';
 import { DashboardComponent } from './routes/components/dashboard/dashboard.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PricingPlanComponent } from './routes/components/pricing-plan/pricing-plan.component';
+import { AboutComponent } from './routes/components/about/about.component';
 
 @NgModule({
-  declarations: [AppComponent, ...routeComponents, DashboardComponent, PricingPlanComponent],
+  declarations: [AppComponent, ...routeComponents, DashboardComponent, PricingPlanComponent, AboutComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

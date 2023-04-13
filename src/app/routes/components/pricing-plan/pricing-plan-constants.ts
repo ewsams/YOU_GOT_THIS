@@ -10,7 +10,7 @@ export const PRICING_PLANS: Array<PricingPlan> = [
     items: [
       'Upload up to 5 PDFs per month',
       'Basic vectorization',
-      'Interactive 2D GUI',
+      'Interactive  GUI',
     ],
     buttonText: 'Get Started',
     footer: 'Ideal for individuals and small projects.',
@@ -22,7 +22,7 @@ export const PRICING_PLANS: Array<PricingPlan> = [
     items: [
       'Upload up to 50 MB per month',
       'Advanced vectorization',
-      'Interactive 3D GUI',
+      'Interactive  GUI',
       'Priority customer support',
     ],
     buttonText: 'Our Most Popular',

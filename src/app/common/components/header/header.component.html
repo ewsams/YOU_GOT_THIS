@@ -10,27 +10,14 @@
         class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900"
         [routerLink]="'/home'"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          class="w-10 h-10 text-white p-2 bg-blue-500 rounded-full"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-          ></path>
-        </svg>
+        <img src="assets/images-icons/you_got_this_logo.svg" alt="" />
         <span
           class="ml-3 text-xl"
           [ngClass]="{
             'text-gray-900': !themeService.currentTheme,
             'text-white': themeService.currentTheme
           }"
-          >Tailblocks</span
+          >You Got This AI</span
         >
       </a>
     </div>
@@ -40,7 +27,7 @@
       <a class="mr-5 hover:text-blue-500" [routerLink]="'/plans'"
         >Available Plans</a
       >
-      <a class="mr-5 hover:text-blue-500">Second Link</a>
+      <a class="mr-5 hover:text-blue-500" [routerLink]="'/about'">About Us</a>
       <a class="mr-5 hover:text-blue-500">Third Link</a>
     </nav>
     <div class="flex items-center">
