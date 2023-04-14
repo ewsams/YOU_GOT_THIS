@@ -32,8 +32,8 @@
             <div
               class="text-center"
               [ngClass]="{
-                'text-gray-900': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
+                'text-gray-900': !(isDarkTheme$ | async),
+                'text-white': (isDarkTheme$ | async)
               }"
             >
               <h2 class="text-xl">Current Plan</h2>
@@ -49,8 +49,8 @@
             <div
               class="text-center"
               [ngClass]="{
-                'text-gray-900': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
+                'text-gray-900': !(isDarkTheme$ | async),
+                'text-white': (isDarkTheme$ | async)
               }"
             >
               <h2 class="text-xl">Usage</h2>
@@ -66,8 +66,8 @@
             <div
               class="text-center"
               [ngClass]="{
-                'text-gray-900': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
+                'text-gray-900': !(isDarkTheme$ | async),
+                'text-white': (isDarkTheme$ | async)
               }"
             >
               <h2 class="text-xl">Monthly Subscription</h2>
@@ -84,16 +84,16 @@
           <h2
             class="text-xl"
             [ngClass]="{
-              'text-gray-900': !themeService.currentTheme,
-              'text-white': themeService.currentTheme
+              'text-gray-900': !(isDarkTheme$ | async),
+              'text-white': (isDarkTheme$ | async)
             }"
           >
             Usage Graph
           </h2>
           <div
             [ngClass]="{
-              'light-theme': !themeService.currentTheme,
-              'dark-theme': themeService.currentTheme
+              'light-theme': !(isDarkTheme$ | async),
+              'dark-theme': (isDarkTheme$ | async)
             }"
           >
             <ngx-charts-bar-vertical

@@ -1,23 +1,21 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { takeUntil } from 'rxjs';
-import { SubResolver } from 'src/app/common/helpers/sub-resolver';
-import { ThemeService } from 'src/app/common/services/theme.service';
-import { AuthService } from '../../services/auth.service';
+import { Store } from '@ngrx/store';
+import { clearError, register } from '../../store/auth.actions';
+import { selectErrorMessage } from '../../store/auth.selectors';
+import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
 
 @Component({
   selector: 'app-create-user',
   templateUrl: './create-user.component.html',
   styleUrls: ['./create-user.component.scss'],
 })
-export class CreateUserComponent extends SubResolver implements OnInit {
+export class CreateUserComponent implements OnInit {
   public registerForm: FormGroup | undefined;
-  public errorMessage: string | null = null;
-  protected themeService = inject(ThemeService);
-  private _authService = inject(AuthService);
+  private _store = inject(Store);
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
   private _formBuilder = inject(FormBuilder);
-  private _router = inject(Router);
+  public errorMessage$ = this._store.select(selectErrorMessage);
 
   ngOnInit(): void {
     this.registerForm = this._formBuilder.group({
@@ -33,21 +31,10 @@ export class CreateUserComponent extends SubResolver implements OnInit {
 
     const { email, password } = this.registerForm?.value;
 
-    this._authService
-      .register(email, password)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (user) => {
-          // Handle successful registration
-          console.log('Registered successful');
-          this.errorMessage = null;
-          this._router.navigate(['/profile']);
-        },
-        error: (e) => {
-          // Handle error
-          console.log(e.error.message, e);
-          this.errorMessage = e.error.message;
-        },
-      });
+    this._store.dispatch(register({ email, password }));
+  }
+
+  ngOnDestroy(): void {
+    this._store.dispatch(clearError());
   }
 }

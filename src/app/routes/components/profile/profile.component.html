@@ -1,8 +1,8 @@
 <section
   class="body-font mb-20"
   [ngClass]="{
-    'text-gray-900': !themeService.currentTheme,
-    'text-white': themeService.currentTheme
+    'text-gray-900': !(isDarkTheme$ | async),
+    'text-white': (isDarkTheme$ | async)
   }"
 >
   <div class="container px-5 py-24 mx-auto flex flex-wrap flex-col h-full">

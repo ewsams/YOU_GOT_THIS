@@ -1,8 +1,8 @@
 <section
   class="text-gray-600 body-font"
   [ngClass]="{
-    'text-gray-900': !themeService.currentTheme,
-    'text-white': themeService.currentTheme
+    'text-gray-900': !(isDarkTheme$ | async),
+    'text-white': (isDarkTheme$ | async)
   }"
 >
   <div
@@ -35,26 +35,28 @@
     </div>
     <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
       <img
-        class="object-cover object-center rounded"
+        class="object-cover object-center rounded svg-image1"
         alt="hero"
-        src="https://dummyimage.com/720x600"
+        src="assets/images-icons/landing_image.svg"
       />
     </div>
   </div>
 </section>
 <!-- SECOND SECTION -->
 <section
-  class="text-gray-600 body-font"
+  class="body-font"
   [ngClass]="{
-    'gradient-animation-light': !themeService.currentTheme,
-    'gradient-animation-dark': themeService.currentTheme
+    'text-gray-900': !(isDarkTheme$ | async),
+    'text-white': (isDarkTheme$ | async),
+    'gradient-animation-light': !(isDarkTheme$ | async),
+    'gradient-animation-dark': (isDarkTheme$ | async)
   }"
 >
   <div
     class="container px-5 py-24 mx-auto"
     [ngClass]="{
-      'text-gray-100': !themeService.currentTheme,
-      'text-white': themeService.currentTheme
+      'text-gray-900': !(isDarkTheme$ | async),
+      'text-white': (isDarkTheme$ | async)
     }"
   >
     <div class="flex flex-wrap -m-4 text-center">
@@ -95,8 +97,8 @@
       <h1
         class="title-font sm:text-4xl text-3xl mb-4 font-medium"
         [ngClass]="{
-          'text-gray-900': !themeService.currentTheme,
-          'text-white': themeService.currentTheme
+          'text-gray-900': !(isDarkTheme$ | async),
+          'text-white': (isDarkTheme$ | async)
         }"
       >
         Before they sold out <br class="hidden lg:inline-block" />readymade
@@ -105,8 +107,8 @@
       <p
         class="mb-8 leading-relaxed"
         [ngClass]="{
-          'text-gray-900': !themeService.currentTheme,
-          'text-white': themeService.currentTheme
+          'text-gray-900': !(isDarkTheme$ | async),
+          'text-white': (isDarkTheme$ | async)
         }"
       >
         Copper mug try-hard pitchfork pour-over freegan heirloom neutra air

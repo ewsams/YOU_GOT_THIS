@@ -7,8 +7,8 @@
       <h2
         class="mt-6 text-center text-3xl font-extrabold"
         [ngClass]="{
-          'text-gray-900': !themeService.currentTheme,
-          'text-white': themeService.currentTheme
+          'text-gray-900': !(isDarkTheme$ | async),
+          'text-white': (isDarkTheme$ | async)
         }"
       >
         Login
@@ -64,10 +64,10 @@
         </div>
       </div>
       <div
-        *ngIf="errorMessage"
+        *ngIf="errorMessage$ | async"
         class="flex justify-center text-red-500 text-sm my-2"
       >
-        <span>{{ errorMessage }}</span>
+        <span>{{ errorMessage$ | async }}</span>
       </div>
 
       <div>

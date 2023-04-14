@@ -4,9 +4,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { tap, switchMap, timer } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { Profile } from 'src/app/common/models/profile.model';
+import { Store } from '@ngrx/store';
 import { ProfileService } from 'src/app/common/services/profile.service';
-import { ThemeService } from 'src/app/common/services/theme.service';
+import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
 
 @Component({
   selector: 'app-profile',
@@ -18,13 +18,14 @@ export class ProfileComponent implements OnInit {
   public currentStep = 1;
   public imagePreview: string | ArrayBuffer | null = null;
   public selectedFile: File | null = null;
-  protected themeService = inject(ThemeService);
   private _profileService = inject(ProfileService);
   private formBuilder = inject(FormBuilder);
   private _sanitizer = inject(DomSanitizer);
   private _authService = inject(AuthService);
   private _router = inject(Router);
   public profileCreated = false;
+  protected _store = inject(Store);
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
 
   public tabs = [
     {

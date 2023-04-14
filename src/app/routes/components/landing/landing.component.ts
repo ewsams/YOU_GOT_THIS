@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { ThemeService } from 'src/app/common/services/theme.service';
+import { Store } from '@ngrx/store';
+import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
 
 @Component({
   selector: 'app-landing',
@@ -7,5 +8,6 @@ import { ThemeService } from 'src/app/common/services/theme.service';
   styleUrls: ['./landing.component.scss'],
 })
 export class LandingComponent {
-  protected themeService = inject(ThemeService);
+  protected _store = inject(Store);
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
 }

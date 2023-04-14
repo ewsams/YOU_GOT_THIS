@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -9,13 +9,16 @@ import { AppRoutingModule, routeComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { CommonUtilModule } from './common/common-util.module';
-import { DashboardComponent } from './routes/components/dashboard/dashboard.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { PricingPlanComponent } from './routes/components/pricing-plan/pricing-plan.component';
-import { AboutComponent } from './routes/components/about/about.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth/store/auth.effects';
+import { ThemeEffects } from './common/store/theme/theme.effects';
 
 @NgModule({
-  declarations: [AppComponent, ...routeComponents, DashboardComponent, PricingPlanComponent, AboutComponent],
+  declarations: [AppComponent, ...routeComponents],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -27,6 +30,17 @@ import { AboutComponent } from './routes/components/about/about.component';
     FormsModule,
     RouterModule,
     NgxChartsModule,
+    EffectsModule.forRoot([AuthEffects, ThemeEffects]),
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+    }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      logOnly: !isDevMode(), // Restrict extension to log-only mode
+      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+      trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
+      traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],

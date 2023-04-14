@@ -15,4 +15,9 @@ export class ThemeService {
   public get currentTheme(): boolean {
     return this._theme.value;
   }
+
+  public toggleTheme(): void {
+    const currentTheme = this._theme.value;
+    this._theme.next(!currentTheme);
+  }
 }

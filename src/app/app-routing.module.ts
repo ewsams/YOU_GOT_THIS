@@ -13,6 +13,8 @@ export const routeComponents = [
   UpdateProfileComponent,
   LandingComponent,
   DashboardComponent,
+  PricingPlanComponent,
+  AboutComponent,
 ];
 
 const routes: Routes = [

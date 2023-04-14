@@ -4,8 +4,8 @@
       <div class="md:w-1/2">
         <h2
           [ngClass]="{
-            'text-gray-900': !themeService.currentTheme,
-            'text-white': themeService.currentTheme
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
           }"
           class="text-2xl font-extrabold tracking-tight"
         >
@@ -13,8 +13,8 @@
         </h2>
         <p
           [ngClass]="{
-            'text-gray-600': !themeService.currentTheme,
-            'text-gray-400': themeService.currentTheme
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
           }"
           class="mt-4 max-w-2xl text-xl"
         >
@@ -25,8 +25,8 @@
         </p>
         <p
           [ngClass]="{
-            'text-gray-600': !themeService.currentTheme,
-            'text-gray-400': themeService.currentTheme
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
           }"
           class="mt-4 max-w-2xl text-xl"
         >
@@ -39,8 +39,8 @@
         </p>
         <p
           [ngClass]="{
-            'text-gray-600': !themeService.currentTheme,
-            'text-gray-400': themeService.currentTheme
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
           }"
           class="mt-4 max-w-2xl text-xl"
         >
@@ -53,8 +53,8 @@
         </p>
         <p
           [ngClass]="{
-            'text-gray-600': !themeService.currentTheme,
-            'text-gray-400': themeService.currentTheme
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
           }"
           class="mt-4 max-w-2xl text-xl"
         >
@@ -66,8 +66,8 @@
         </p>
         <p
           [ngClass]="{
-            'text-gray-600': !themeService.currentTheme,
-            'text-gray-400': themeService.currentTheme
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
           }"
           class="mt-4 max-w-2xl text-xl"
         >
@@ -80,7 +80,7 @@
       </div>
       <div class="md:w-1/2 mt-8 md:mt-0">
         <img
-          class="object-cover object-center rounded mx-auto md:ml-8"
+          class="object-cover object-center rounded mx-auto md:ml-8 my-custom-image"
           alt="hero"
           src="assets/images-icons/you_got_this_logo.svg"
         />

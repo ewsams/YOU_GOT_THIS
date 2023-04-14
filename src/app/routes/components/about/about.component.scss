@@ -1,0 +1,9 @@
+.my-custom-image {
+  margin-top: -4rem;
+}
+
+@media (max-width: 768px) {
+  .my-custom-image {
+    margin-top: 0;
+  }
+}

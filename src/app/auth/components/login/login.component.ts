@@ -1,8 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { ThemeService } from 'src/app/common/services/theme.service';
-import { AuthService } from '../../services/auth.service';
+import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
+import { clearError, login } from '../../store/auth.actions';
+import { selectErrorMessage } from '../../store/auth.selectors';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +13,10 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup | undefined;
-  public errorMessage: string = '';
-  protected themeService = inject(ThemeService);
-  private _authService = inject(AuthService);
   private _formBuilder = inject(FormBuilder);
-  private _router = inject(Router);
+  private _store = inject(Store);
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
+  public errorMessage$ = this._store.select(selectErrorMessage);
 
   ngOnInit() {
     this.loginForm = this._formBuilder.group({
@@ -31,14 +32,10 @@ export class LoginComponent implements OnInit {
 
     const email = this.loginForm?.get('email')?.value;
     const password = this.loginForm?.get('password')?.value;
+    this._store.dispatch(login({ email, password }));
+  }
 
-    this._authService.login(email, password).subscribe({
-      next: () => {
-        this._router.navigate(['/dashboard']);
-      },
-      error: (error) => {
-        this.errorMessage = error.error.message;
-      },
-    });
+  ngOnDestroy(): void {
+    this._store.dispatch(clearError());
   }
 }
