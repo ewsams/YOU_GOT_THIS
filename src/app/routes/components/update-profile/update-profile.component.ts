@@ -8,7 +8,8 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { SubResolver } from 'src/app/common/helpers/sub-resolver';
 import { Profile } from 'src/app/common/models/profile.model';
 import { ProfileService } from 'src/app/common/services/profile.service';
-import { ThemeService } from 'src/app/common/services/theme.service';
+import { Store } from '@ngrx/store';
+import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
 
 @Component({
   selector: 'app-update-profile',
@@ -20,7 +21,6 @@ export class UpdateProfileComponent extends SubResolver implements OnInit {
   public currentStep = 1;
   public imagePreview: string | ArrayBuffer | null = null;
   public selectedFile: File | null = null;
-  protected themeService = inject(ThemeService);
   private _profileService = inject(ProfileService);
   private formBuilder = inject(FormBuilder);
   private _sanitizer = inject(DomSanitizer);
@@ -29,6 +29,8 @@ export class UpdateProfileComponent extends SubResolver implements OnInit {
   public userId: string | undefined;
   public currentUserProfile: Profile | undefined;
   public profileUpdated = false;
+  protected _store = inject(Store);
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
 
   public tabs = [
     {

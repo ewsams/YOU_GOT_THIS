@@ -1,5 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { ThemeService } from './common/services/theme.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',

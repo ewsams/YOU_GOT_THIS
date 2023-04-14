@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { ThemeService } from '../../services/theme.service';
+import { Store } from '@ngrx/store';
+import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
 
 @Component({
   selector: 'app-footer',
@@ -7,5 +8,20 @@ import { ThemeService } from '../../services/theme.service';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
-  protected themeService = inject(ThemeService);
+  protected _store = inject(Store);
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
+  public categorySections: { title: string; links: string[] }[] = [
+    {
+      title: 'CATEGORIES',
+      links: ['First Link', 'Second Link', 'Third Link', 'Fourth Link'],
+    },
+    {
+      title: 'CATEGORIES',
+      links: ['First Link', 'Second Link', 'Third Link', 'Fourth Link'],
+    },
+    {
+      title: 'CATEGORIES',
+      links: ['First Link', 'Second Link', 'Third Link', 'Fourth Link'],
+    },
+  ];
 }

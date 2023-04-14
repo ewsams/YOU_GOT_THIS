@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { PDFDocument } from 'pdf-lib';
-import { ThemeService } from '../../services/theme.service';
+import { Store } from '@ngrx/store';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 import { PdfService } from '../../services/pdf.service';
 import { SubResolver } from '../../helpers/sub-resolver';
 import { takeUntil } from 'rxjs';
 import { PdfMetrics } from '../../models/pdf-metrics.model';
+import { selectIsDarkTheme } from '../../store/theme/theme.selectors';
 
 @Component({
   selector: 'app-pdf-upload',
@@ -13,7 +14,6 @@ import { PdfMetrics } from '../../models/pdf-metrics.model';
   styleUrls: ['./pdf-upload.component.scss'],
 })
 export class PdfUploadComponent extends SubResolver implements OnInit {
-  protected themeService = inject(ThemeService);
   private _pdfService = inject(PdfService);
 
   protected selectedEncoding = 'cl100k_base';
@@ -21,6 +21,8 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
   protected metrics: PdfMetrics = {};
   protected loading = false;
   protected progress = 0;
+  protected _store = inject(Store);
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
 
   ngOnInit(): void {}
 

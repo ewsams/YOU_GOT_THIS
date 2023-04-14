@@ -1,8 +1,8 @@
 <div
   class="container mx-auto"
   [ngClass]="{
-    'text-gray-900': !themeService.currentTheme,
-    'text-white': themeService.currentTheme
+    'text-gray-900': !(isDarkTheme$ | async),
+    'text-white': (isDarkTheme$ | async)
   }"
 >
   <div class="mt-10">
@@ -59,8 +59,8 @@
     <div *ngIf="!file && !loading" class="text-center mt-10">
       <h1
         [ngClass]="{
-          'text-gray-900': !themeService.currentTheme,
-          'text-white': themeService.currentTheme
+          'text-gray-900': !(isDarkTheme$ | async),
+          'text-white': (isDarkTheme$ | async)
         }"
         class="sm:text-3xl text-2xl font-medium title-font mb-2"
       >
@@ -72,8 +72,8 @@
       *ngIf="metrics"
       class="p-6 m-4"
       [ngClass]="{
-        'text-gray-900': !themeService.currentTheme,
-        'text-white': themeService.currentTheme
+        'text-gray-900': !(isDarkTheme$ | async),
+        'text-white': (isDarkTheme$ | async)
       }"
     >
       <section class="body-font">

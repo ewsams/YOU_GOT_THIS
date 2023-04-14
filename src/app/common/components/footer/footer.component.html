@@ -1,11 +1,11 @@
 <footer
   class="body-font"
   [ngClass]="{
-    'text-gray-600': !themeService.currentTheme,
-    'text-gray-100': themeService.currentTheme,
-    'bg-blue-500': !themeService.currentTheme,
-    'gradient-animation-light': !themeService.currentTheme,
-    'gradient-animation-dark': themeService.currentTheme
+    'text-gray-600': !(isDarkTheme$ | async),
+    'text-gray-100': (isDarkTheme$ | async),
+    'bg-blue-500': !(isDarkTheme$ | async),
+    'gradient-animation-light': !(isDarkTheme$ | async),
+    'gradient-animation-dark': (isDarkTheme$ | async)
   }"
 >
   <div
@@ -21,8 +21,8 @@
         <span
           class="ml-3 text-xl"
           [ngClass]="{
-            'text-gray-100': !themeService.currentTheme,
-            'text-white': themeService.currentTheme
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
           }"
           >You Got This AI</span
         >
@@ -30,176 +30,47 @@
       <p
         class="mt-2 text-sm"
         [ngClass]="{
-          'text-gray-100': !themeService.currentTheme,
-          'text-white': themeService.currentTheme
+          'text-gray-900': !(isDarkTheme$ | async),
+          'text-white': (isDarkTheme$ | async)
         }"
       >
         Air plant banjo lyft occupy retro adaptogen indego
       </p>
     </div>
+    <!-- ... -->
+
     <div
       class="flex-grow flex flex-wrap md:pr-20 -mb-10 md:text-left text-center order-first"
     >
-      <div class="lg:w-1/4 md:w-1/2 w-full px-4">
+      <div
+        class="lg:w-1/4 md:w-1/2 w-full px-4"
+        *ngFor="let section of categorySections"
+      >
         <h2
           class="title-font font-medium tracking-widest text-sm mb-3"
           [ngClass]="{
-            'text-gray-100': !themeService.currentTheme,
-            'text-white': themeService.currentTheme
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
           }"
         >
-          CATEGORIES
+          {{ section.title }}
         </h2>
         <nav class="list-none mb-10">
-          <li>
+          <li *ngFor="let link of section.links">
             <a
               class="hover:text-blue-500"
               [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
+                'text-gray-900': !(isDarkTheme$ | async),
+                'text-white': (isDarkTheme$ | async)
               }"
-              >First Link</a
-            >
-          </li>
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >Second Link</a
-            >
-          </li>
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >Third Link</a
-            >
-          </li>
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >Fourth Link</a
-            >
-          </li>
-        </nav>
-      </div>
-      <div class="lg:w-1/4 md:w-1/2 w-full px-4">
-        <h2
-          class="title-font font-medium tracking-widest text-sm mb-3"
-          [ngClass]="{
-            'text-gray-100': !themeService.currentTheme,
-            'text-white': themeService.currentTheme
-          }"
-        >
-          CATEGORIES
-        </h2>
-        <nav class="list-none mb-10">
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >First Link</a
-            >
-          </li>
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >Second Link</a
-            >
-          </li>
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >Third Link</a
-            >
-          </li>
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >Fourth Link</a
-            >
-          </li>
-        </nav>
-      </div>
-      <div class="lg:w-1/4 md:w-1/2 w-full px-4">
-        <h2
-          class="title-font font-medium tracking-widest text-sm mb-3"
-          [ngClass]="{
-            'text-gray-100': !themeService.currentTheme,
-            'text-white': themeService.currentTheme
-          }"
-        >
-          CATEGORIES
-        </h2>
-        <nav class="list-none mb-10">
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >First Link</a
-            >
-          </li>
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >Second Link</a
-            >
-          </li>
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >Third Link</a
-            >
-          </li>
-          <li>
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-100': !themeService.currentTheme,
-                'text-white': themeService.currentTheme
-              }"
-              >Fourth Link</a
+              >{{ link }}</a
             >
           </li>
         </nav>
       </div>
     </div>
+
+    <!-- ... -->
   </div>
   <div class="bg-gray-100">
     <div
