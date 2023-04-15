@@ -57,11 +57,9 @@ export class AuthService {
   }
 
   private retrieveUserIdFromSession(): void {
-    const storedUser: User = sessionStorage.getItem(
-      'currentUser'
-    ) as unknown as User;
+    const storedUser = sessionStorage.getItem('currentUser');
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser as unknown as string);
+      const parsedUser = JSON.parse(storedUser);
       this.currentUserSubjectId.next(parsedUser.userId);
     }
   }
