@@ -2,9 +2,9 @@
   <div
     class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"
   >
-    <div class="flex items-center justify-between w-full md:w-auto">
+    <div class="flex items-center justify-center w-full md:w-auto">
       <a
-        class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900"
+        class="flex title-font font-medium items-center md:justify-start justify-center"
         [routerLink]="'/home'"
       >
         <img src="assets/images-icons/you_got_this_logo.svg" alt="" />
@@ -19,17 +19,19 @@
       </a>
     </div>
     <nav
-      class="mt-2 md:mt-0 md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center md:block hidden"
+      class="mt-2 md:mt-0 md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center md:block mb-6"
       [ngClass]="{
         'text-gray-900': !(isDarkTheme$ | async),
         'text-white': (isDarkTheme$ | async)
       }"
     >
-      <a class="mr-5 hover:text-blue-500" [routerLink]="'/plans'"
+      <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/plans'"
         >Available Plans</a
       >
-      <a class="mr-5 hover:text-blue-500" [routerLink]="'/about'">About Us</a>
-      <a class="mr-5 hover:text-blue-500">Third Link</a>
+      <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/about'"
+        >About Us</a
+      >
+      <a class="mr-5 hover:text-blue-500 text-sm">Third Link</a>
     </nav>
     <div class="flex items-center">
       <button
@@ -58,7 +60,13 @@
         </button>
       </div>
       <ng-template #userSection>
-        <div class="ml-4 flex items-center">
+        <div class="flex items-center">
+          <button
+            (click)="signOut()"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Sign Out
+          </button>
           <img
             *ngIf="profile$ | async as profile"
             [src]="
@@ -67,28 +75,15 @@
                 : 'assets/images-icons/default-avatar-icon.svg'
             "
             alt="Avatar"
-            class="rounded-full mr-4"
+            class="rounded-full ml-6"
             [ngClass]="{
               'h-16 w-16 shadow-lg': profile.imageUrl,
               'h-8 w-8': !profile.imageUrl
             }"
             [routerLink]="'/dashboard'"
           />
-          <button
-            (click)="signOut()"
-            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ml-4"
-          >
-            Sign Out
-          </button>
         </div>
       </ng-template>
     </div>
   </div>
-  <nav
-    class="md:hidden flex flex-wrap items-center text-base justify-center mt-4"
-  >
-    <a class="mr-5 hover:text-blue-500">First Link</a>
-    <a class="mr-5 hover:text-blue-500">Second Link</a>
-    <a class="mr-5 hover:text-blue-500">Third Link</a>
-  </nav>
 </header>
