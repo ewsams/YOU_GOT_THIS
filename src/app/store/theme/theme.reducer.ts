@@ -17,6 +17,6 @@ export const themeReducer = createReducer(
 );
 
 function getThemeFromSessionStorage(): boolean {
-  const storedTheme = sessionStorage.getItem('theme');
+  const storedTheme = localStorage.getItem('theme');
   return storedTheme === 'dark';
 }

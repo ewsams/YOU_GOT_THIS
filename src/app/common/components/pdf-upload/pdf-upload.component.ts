@@ -1,4 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { PDFDocument } from 'pdf-lib';
 import { Store } from '@ngrx/store';
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
@@ -14,6 +20,9 @@ import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
   styleUrls: ['./pdf-upload.component.scss'],
 })
 export class PdfUploadComponent extends SubResolver implements OnInit {
+  @ViewChild('progressBar', { static: false })
+  progressBar!: ElementRef;
+
   private _pdfService = inject(PdfService);
 
   protected selectedEncoding = 'cl100k_base';
@@ -64,6 +73,8 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
             this.metrics.encodingName = encoding_name;
             this.metrics.cost = result.cost;
             this.loading = false;
+            this.progress = 100;
+            this.updateProgressBar(this.progress);
           },
           error: (error) => {
             console.error('Error fetching token count:', error);
@@ -73,7 +84,8 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
     };
     fileReader.onprogress = (event) => {
       if (event.lengthComputable) {
-        this.progress = Math.round((event.loaded / event.total) * 100);
+        this.progress = Math.round((event.loaded / event.total) * 75);
+        this.updateProgressBar(this.progress);
       }
     };
     fileReader.readAsArrayBuffer(file);
@@ -107,5 +119,11 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
       .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+
+  private updateProgressBar(progress: number): void {
+    if (this.progressBar) {
+      this.progressBar.nativeElement.style.width = `${progress}%`;
+    }
   }
 }

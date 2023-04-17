@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { inject, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PdfUploadComponent } from './common/components/pdf-upload/pdf-upload.component';
 import { AboutComponent } from './routes/components/about/about.component';
@@ -7,6 +7,7 @@ import { LandingComponent } from './routes/components/landing/landing.component'
 import { PricingPlanComponent } from './routes/components/pricing-plan/pricing-plan.component';
 import { ProfileComponent } from './routes/components/profile/profile.component';
 import { UpdateProfileComponent } from './routes/components/update-profile/update-profile.component';
+import { LoginGuard } from 'src/app/auth/guards/login-guard.guard';
 
 export const routeComponents = [
   ProfileComponent,
@@ -19,12 +20,28 @@ export const routeComponents = [
 
 const routes: Routes = [
   { path: 'home', component: LandingComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'update-profile', component: UpdateProfileComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'upload-pdf', component: PdfUploadComponent },
-  { path: 'plans', component: PricingPlanComponent },
   { path: 'about', component: AboutComponent },
+  { path: 'plans', component: PricingPlanComponent },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [() => inject(LoginGuard).canActivate()],
+  },
+  {
+    path: 'update-profile',
+    component: UpdateProfileComponent,
+    canActivate: [() => inject(LoginGuard).canActivate()],
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [() => inject(LoginGuard).canActivate()],
+  },
+  {
+    path: 'upload-pdf',
+    component: PdfUploadComponent,
+    canActivate: [() => inject(LoginGuard).canActivate()],
+  },
 ];
 
 @NgModule({

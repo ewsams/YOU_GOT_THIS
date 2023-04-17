@@ -43,8 +43,8 @@ export const PRICING_PLANS: Array<PricingPlan> = [
   },
   {
     title: 'ENTERPRISE',
-    monthlyCost: '$72',
-    annualCost: '$800',
+    monthlyCost: 'Starting at $72',
+    annualCost: 'Starting at $800',
     items: [
       '400 MB uploads',
       'Premium vectorization',

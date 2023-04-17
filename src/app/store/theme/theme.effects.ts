@@ -10,8 +10,8 @@ export class ThemeEffects {
   constructor(private actions$: Actions, rendererFactory: RendererFactory2) {
     this._renderer = rendererFactory.createRenderer(null, null);
 
-    // Get the stored theme from sessionStorage and apply the appropriate class to the body
-    const storedTheme = sessionStorage.getItem('theme') || 'light';
+    // Get the stored theme from localStorage and apply the appropriate class to the body
+    const storedTheme = localStorage.getItem('theme') || 'light';
     const body = document.body;
     this._renderer.removeClass(
       body,
@@ -28,7 +28,7 @@ export class ThemeEffects {
           const body = document.body;
           const isDarkTheme = body.classList.contains('dark');
           const newTheme = isDarkTheme ? 'light' : 'dark';
-          sessionStorage.setItem('theme', newTheme);
+          localStorage.setItem('theme', newTheme);
           this._renderer.removeClass(body, isDarkTheme ? 'dark' : 'light');
           this._renderer.addClass(body, newTheme);
         })

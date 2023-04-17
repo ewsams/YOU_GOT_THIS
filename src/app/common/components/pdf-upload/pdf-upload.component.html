@@ -124,12 +124,13 @@
         </div>
       </section>
     </div>
-    <div *ngIf="loading" class="my-4">
+    <div *ngIf="loading" class="mx-4 my-4">
       <p>Loading PDF...</p>
-      <div class="bg-gray-200 w-full h-2 rounded-lg">
+      <div class="mx-4 md:mx-10 h-3 relative rounded-full overflow-hidden">
+        <div class="w-full h-full bg-gray-200 absolute"></div>
         <div
-          class="bg-blue-500 h-2 rounded-lg"
-          [style.width.%]="progress"
+          #progressBar
+          class="transition-all ease-out duration-1000 h-full bg-blue-500 relative w-0"
         ></div>
       </div>
     </div>
