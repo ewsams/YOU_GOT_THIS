@@ -8,6 +8,7 @@ import { PricingPlanComponent } from './routes/components/pricing-plan/pricing-p
 import { ProfileComponent } from './routes/components/profile/profile.component';
 import { UpdateProfileComponent } from './routes/components/update-profile/update-profile.component';
 import { LoginGuard } from 'src/app/auth/guards/login-guard.guard';
+import { StripePaymentComponent } from './routes/components/stripe-payment/stripe-payment.component';
 
 export const routeComponents = [
   ProfileComponent,
@@ -16,6 +17,7 @@ export const routeComponents = [
   DashboardComponent,
   PricingPlanComponent,
   AboutComponent,
+  StripePaymentComponent,
 ];
 
 const routes: Routes = [

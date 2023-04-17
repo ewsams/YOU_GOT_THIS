@@ -4,6 +4,7 @@ import { PricingPlan } from 'src/app/common/models/pricing-plan.model';
 
 export const PRICING_PLANS: Array<PricingPlan> = [
   {
+    priceId: 'price_id_for_BASIC',
     title: 'BASIC',
     monthlyCost: 'Free',
     annualCost: 'Free',
@@ -16,6 +17,7 @@ export const PRICING_PLANS: Array<PricingPlan> = [
     footer: 'Ideal for individuals and small projects.',
   },
   {
+    priceId: 'price_id_for_PRO',
     title: 'PRO',
     monthlyCost: '$38',
     annualCost: '$400',
@@ -29,6 +31,7 @@ export const PRICING_PLANS: Array<PricingPlan> = [
     footer: 'Perfect for professionals and businesses.',
   },
   {
+    priceId: 'price_id_for_BUSINESS',
     title: 'BUSINESS',
     monthlyCost: '$56',
     annualCost: '$500',
@@ -42,6 +45,7 @@ export const PRICING_PLANS: Array<PricingPlan> = [
     footer: 'Tailored for medium to large-sized businesses.',
   },
   {
+    priceId: 'price_id_for_ENTERPRISE',
     title: 'ENTERPRISE',
     monthlyCost: 'Starting at $72',
     annualCost: 'Starting at $800',

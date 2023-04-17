@@ -18,22 +18,9 @@
         class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900"
       >
         <img src="assets/images-icons/you_got_this_logo_footer.svg" alt="" />
-        <span
-          class="ml-3 text-xl"
-          [ngClass]="{
-            'text-gray-900': !(isDarkTheme$ | async),
-            'text-white': (isDarkTheme$ | async)
-          }"
-          >You Got This AI</span
-        >
+        <span class="ml-3 text-2xl text-white">You Got This AI</span>
       </a>
-      <p
-        class="mt-2 text-sm"
-        [ngClass]="{
-          'text-gray-900': !(isDarkTheme$ | async),
-          'text-white': (isDarkTheme$ | async)
-        }"
-      >
+      <p class="mt-2 text-sm text-white">
         Air plant banjo lyft occupy retro adaptogen indego
       </p>
     </div>
@@ -47,24 +34,13 @@
         *ngFor="let section of categorySections"
       >
         <h2
-          class="title-font font-medium tracking-widest text-sm mb-3"
-          [ngClass]="{
-            'text-gray-900': !(isDarkTheme$ | async),
-            'text-white': (isDarkTheme$ | async)
-          }"
+          class="title-font font-medium tracking-widest text-xl mb-3 text-white"
         >
           {{ section.title }}
         </h2>
         <nav class="list-none mb-10">
           <li *ngFor="let link of section.links">
-            <a
-              class="hover:text-blue-500"
-              [ngClass]="{
-                'text-gray-900': !(isDarkTheme$ | async),
-                'text-white': (isDarkTheme$ | async)
-              }"
-              >{{ link }}</a
-            >
+            <a class="hover:text-blue-500 text-white">{{ link }}</a>
           </li>
         </nav>
       </div>

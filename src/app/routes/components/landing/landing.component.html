@@ -42,21 +42,13 @@
 </section>
 <!-- SECOND SECTION -->
 <section
-  class="body-font"
+  class="body-font text-white"
   [ngClass]="{
-    'text-gray-900': !(isDarkTheme$ | async),
-    'text-white': (isDarkTheme$ | async),
     'gradient-animation-light': !(isDarkTheme$ | async),
     'gradient-animation-dark': (isDarkTheme$ | async)
   }"
 >
-  <div
-    class="container px-5 py-24 mx-auto"
-    [ngClass]="{
-      'text-gray-900': !(isDarkTheme$ | async),
-      'text-white': (isDarkTheme$ | async)
-    }"
-  >
+  <div class="container px-5 py-24 mx-auto text-white">
     <div class="flex flex-wrap -m-4 text-center">
       <div class="p-4 sm:w-1/4 w-1/2">
         <h2 class="title-font font-medium sm:text-4xl text-3xl">2.7K</h2>
@@ -95,7 +87,7 @@
       class="lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center"
     >
       <h1
-        class="title-font sm:text-4xl text-3xl mb-4 font-medium"
+        class="title-font sm:text-4xl text-3xl mb-4 font-medium text-white"
         [ngClass]="{
           'text-gray-900': !(isDarkTheme$ | async),
           'text-white': (isDarkTheme$ | async)
