@@ -1,9 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { clearError, register } from '../../store/auth.actions';
-import { selectErrorMessage } from '../../store/auth.selectors';
-import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
+import { register, clearError } from 'src/app/store/auth/auth.actions';
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
+import { selectErrorMessage } from 'src/app/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-create-user',

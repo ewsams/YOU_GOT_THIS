@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',

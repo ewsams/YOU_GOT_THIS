@@ -1,15 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { EMPTY, Observable, switchMap, takeUntil, tap } from 'rxjs';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { SubResolver } from '../../helpers/sub-resolver';
-import { Profile } from '../../models/profile.model';
-import { ProfileService } from '../../services/profile.service';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { logout } from 'src/app/auth/store/auth.actions';
-import { selectUser, selectUserId } from 'src/app/auth/store/auth.selectors';
-import { User } from '../../models/user.model';
-import { selectIsDarkTheme } from '../../store/theme/theme.selectors';
-import { toggleTheme } from '../../store/theme/theme.actions';
+import { Observable, Subscription, takeUntil } from 'rxjs';
+import { logout } from 'src/app/store/auth/auth.actions';
+import { selectUserId, selectUser } from 'src/app/store/auth/auth.selectors';
+import { getProfile } from 'src/app/store/profile/profile.actions';
+import {
+  selectProfile,
+  selectProfileLoading,
+  selectProfileError,
+} from 'src/app/store/profile/profile.selector';
+import { toggleTheme } from 'src/app/store/theme/theme.actions';
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
+import { SubResolver } from '../../helpers/sub-resolver';
 
 @Component({
   selector: 'app-header',
@@ -17,14 +19,13 @@ import { toggleTheme } from '../../store/theme/theme.actions';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent extends SubResolver implements OnInit {
-  protected authService = inject(AuthService);
-  private _profileService = inject(ProfileService);
-  public profile: Profile | undefined;
-  public userId: string | null | undefined;
   private _store = inject(Store);
-  public currentUser$: Observable<User | null> | undefined;
-  public isDarkTheme$: Observable<boolean> | undefined;
-  public userId$: Observable<string | null> | undefined;
+  public profile$ = this._store.select(selectProfile);
+  public userId$ = this._store.select(selectUserId);
+  public currentUser$ = this._store.select(selectUser);
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
+  public loading$ = this._store.select(selectProfileLoading);
+  public error$ = this._store.select(selectProfileError);
 
   public toggleTheme(): void {
     this._store.dispatch(toggleTheme());
@@ -35,24 +36,10 @@ export class HeaderComponent extends SubResolver implements OnInit {
   }
 
   ngOnInit(): void {
-    // Get the stored user from sessionStorage and set the userId
-    this.currentUser$ = this._store.select(selectUser);
-    this.userId$ = this._store.select(selectUserId);
-    this.isDarkTheme$ = this._store.select(selectIsDarkTheme);
-
-    // Subscribe to the authService.currentUser observable
-
-    this.userId$
-      .pipe(
-        takeUntil(this.destroy$),
-        switchMap((userId) => {
-          return userId ? this._profileService.getProfile(userId) : EMPTY;
-        })
-      )
-      .subscribe((profile) => {
-        if (profile) {
-          this.profile = profile;
-        }
-      });
+    this.userId$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
+      if (userId) {
+        this._store.dispatch(getProfile({ userId }));
+      }
+    });
   }
 }

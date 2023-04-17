@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { State } from './reducers';
-import { loginSuccess } from './auth/store/auth.actions';
+import { State } from './store/app-state';
 import { User } from './common/models/user.model';
+import { loginSuccess } from './store/auth/auth.actions';
 
 @Component({
   selector: 'app-root',

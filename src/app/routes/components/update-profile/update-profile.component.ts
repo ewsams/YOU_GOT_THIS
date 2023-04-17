@@ -9,7 +9,13 @@ import { SubResolver } from 'src/app/common/helpers/sub-resolver';
 import { Profile } from 'src/app/common/models/profile.model';
 import { ProfileService } from 'src/app/common/services/profile.service';
 import { Store } from '@ngrx/store';
-import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
+import { selectUserId } from 'src/app/store/auth/auth.selectors';
+import {
+  getProfile,
+  updateProfile,
+} from 'src/app/store/profile/profile.actions';
+import { selectProfile } from 'src/app/store/profile/profile.selector';
 
 @Component({
   selector: 'app-update-profile',
@@ -55,19 +61,22 @@ export class UpdateProfileComponent extends SubResolver implements OnInit {
       location: [''],
     });
 
-    this._authService.currentUser$
+    this._store
+      .select(selectUserId)
       .pipe(
         takeUntil(this.destroy$),
-        tap((user) => {
-          if (user) {
-            this.userId = user;
+        tap((userId) => {
+          if (userId) {
+            this.userId = userId;
+            this._store.dispatch(getProfile({ userId }));
           }
-        }),
-        switchMap((userId) =>
-          this._profileService.getProfile(userId as string)
-        ),
-        takeUntil(this.destroy$)
+        })
       )
+      .subscribe();
+
+    this._store
+      .select(selectProfile)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((profile) => {
         if (profile) {
           this.currentUserProfile = profile;
@@ -114,29 +123,18 @@ export class UpdateProfileComponent extends SubResolver implements OnInit {
         );
       }
 
-      if (this._authService.currentUserValue) {
-        this._profileService
-          .updateProfile(this._authService.currentUserValue, formData)
+      if (this.userId) {
+        this._store.dispatch(
+          updateProfile({ userId: this.userId, profile: formData })
+        );
+        this.profileUpdated = true;
+        timer(2000)
           .pipe(
-            // Set profileUpdated to true
-            tap(() => {
-              this.profileUpdated = true;
-            }),
-            // Add a delay using the timer function
-            switchMap(() => timer(2000)),
-            // Perform navigation after the delay
             tap(() => {
               this._router.navigate(['/dashboard']);
             })
           )
-          .subscribe({
-            next: (response) => {
-              console.log('Updated profile:', response);
-            },
-            error: (error) => {
-              console.log('Error creating profile:', error);
-            },
-          });
+          .subscribe();
       }
     }
   }

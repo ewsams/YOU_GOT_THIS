@@ -11,11 +11,12 @@ import { AuthModule } from './auth/auth.module';
 import { CommonUtilModule } from './common/common-util.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
+import { reducers, metaReducers } from './store/app-state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { AuthEffects } from './auth/store/auth.effects';
-import { ThemeEffects } from './common/store/theme/theme.effects';
+import { ProfileEffects } from './store/profile/profile.effects';
+import { ThemeEffects } from './store/theme/theme.effects';
+import { AuthEffects } from './store/auth/auth.effects';
 
 @NgModule({
   declarations: [AppComponent, ...routeComponents],
@@ -30,7 +31,7 @@ import { ThemeEffects } from './common/store/theme/theme.effects';
     FormsModule,
     RouterModule,
     NgxChartsModule,
-    EffectsModule.forRoot([AuthEffects, ThemeEffects]),
+    EffectsModule.forRoot([AuthEffects, ThemeEffects, ProfileEffects]),
     StoreModule.forRoot(reducers, {
       metaReducers,
     }),

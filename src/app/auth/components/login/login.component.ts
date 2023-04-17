@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
-import { clearError, login } from '../../store/auth.actions';
-import { selectErrorMessage } from '../../store/auth.selectors';
+import { login, clearError } from 'src/app/store/auth/auth.actions';
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
+import { selectErrorMessage } from 'src/app/store/auth/auth.selectors';
 
 @Component({
   selector: 'app-login',

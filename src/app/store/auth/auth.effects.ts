@@ -14,7 +14,7 @@ import {
 } from './auth.actions';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Injectable()
 export class AuthEffects {

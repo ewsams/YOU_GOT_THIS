@@ -6,7 +6,7 @@ import { PdfService } from '../../services/pdf.service';
 import { SubResolver } from '../../helpers/sub-resolver';
 import { takeUntil } from 'rxjs';
 import { PdfMetrics } from '../../models/pdf-metrics.model';
-import { selectIsDarkTheme } from '../../store/theme/theme.selectors';
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
 
 @Component({
   selector: 'app-pdf-upload',

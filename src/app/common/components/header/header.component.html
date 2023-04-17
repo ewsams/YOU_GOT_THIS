@@ -60,7 +60,7 @@
       <ng-template #userSection>
         <div class="ml-4 flex items-center">
           <img
-            *ngIf="profile"
+            *ngIf="profile$ | async as profile"
             [src]="
               profile.imageUrl
                 ? profile.imageUrl

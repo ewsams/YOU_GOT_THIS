@@ -2,27 +2,30 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { tap, switchMap, timer } from 'rxjs';
+import { tap, switchMap, timer, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Store } from '@ngrx/store';
 import { ProfileService } from 'src/app/common/services/profile.service';
-import { selectIsDarkTheme } from 'src/app/common/store/theme/theme.selectors';
+import { selectUser } from 'src/app/store/auth/auth.selectors';
+import { SubResolver } from 'src/app/common/helpers/sub-resolver';
+import { createProfile } from 'src/app/store/profile/profile.actions';
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent extends SubResolver implements OnInit {
   public profileForm: FormGroup | undefined;
   public currentStep = 1;
   public imagePreview: string | ArrayBuffer | null = null;
   public selectedFile: File | null = null;
-  private _profileService = inject(ProfileService);
   private formBuilder = inject(FormBuilder);
   private _sanitizer = inject(DomSanitizer);
-  private _authService = inject(AuthService);
+
   private _router = inject(Router);
+  private _userId: string | undefined;
   public profileCreated = false;
   protected _store = inject(Store);
   public isDarkTheme$ = this._store.select(selectIsDarkTheme);
@@ -49,6 +52,15 @@ export class ProfileComponent implements OnInit {
       bio: [''],
       location: [''],
     });
+
+    this._store
+      .select(selectUser)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        if (user) {
+          this._userId = user.userId;
+        }
+      });
   }
 
   onFileSelect(event: any): void {
@@ -69,50 +81,27 @@ export class ProfileComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    if (this.currentStep < 4) {
-      this.goToNextStep();
-    } else {
-      if (this.profileForm?.invalid) {
-        return;
-      }
+    const formData = new FormData();
+    formData.append('name', this.profileForm?.controls['name'].value);
+    formData.append('bio', this.profileForm?.controls['bio'].value);
+    formData.append('location', this.profileForm?.controls['location'].value);
 
-      const formData = new FormData();
-      formData.append('name', this.profileForm?.controls['name'].value);
-      formData.append('bio', this.profileForm?.controls['bio'].value);
-      formData.append('location', this.profileForm?.controls['location'].value);
+    if (this.selectedFile) {
+      formData.append(
+        'profileImage',
+        this.selectedFile,
+        this.selectedFile.name
+      );
+    }
 
-      if (this.selectedFile) {
-        formData.append(
-          'profileImage',
-          this.selectedFile,
-          this.selectedFile.name
-        );
-      }
-
-      if (this._authService.currentUserValue) {
-        this._profileService
-          .createProfile(this._authService.currentUserValue, formData)
-          .pipe(
-            // Set profileUpdated to true
-            tap(() => {
-              this.profileCreated = true;
-            }),
-            // Add a delay using the timer function
-            switchMap(() => timer(2000)),
-            // Perform navigation after the delay
-            tap(() => {
-              this._router.navigate(['/dashboard']);
-            })
-          )
-          .subscribe({
-            next: (response) => {
-              console.log('Profile created:', response);
-            },
-            error: (error) => {
-              console.log('Error creating profile:', error);
-            },
-          });
-      }
+    if (this._userId && this.profileForm?.valid) {
+      this._store.dispatch(
+        createProfile({
+          userId: this._userId as string,
+          profile: formData,
+        })
+      );
+      this._router.navigate(['/dashboard']);
     }
   }
 
