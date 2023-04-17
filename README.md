@@ -54,8 +54,8 @@ There's also a Python Flask app in the root directory of the project, which need
 1. Navigate to the root directory in your terminal or command prompt.
 2. Create a virtual environment with `python -m venv venv` or `virtualenv venv`.
 3. Activate the virtual environment with `source venv/bin/activate` (Mac/Linux) or `venv\Scripts\activate` (Windows).
-4. Install the required dependencies with `pip install -r requirements.txt`.
-5. Run the Flask app with `flask run` or `python app.py`.
+4. Install the required dependencies with `pip3 install -r requirements.txt`.
+5. Run the Flask app with `flask run` or `python3 app.py`.
 
 The app should now be running on the specified port, usually `http://localhost:5000`.
 
