@@ -2,3 +2,6 @@ Flask
 Flask-Cors
 tiktoken
 requests
+langchain
+OpenAI
+python-dotenv
