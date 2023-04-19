@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   private _store = inject(Store);
   public isDarkTheme$ = this._store.select(selectIsDarkTheme);
   public errorMessage$ = this._store.select(selectErrorMessage);
+  public showPassword = false;
 
   ngOnInit() {
     this.loginForm = this._formBuilder.group({
@@ -32,6 +33,10 @@ export class LoginComponent implements OnInit {
     const email = this.loginForm?.get('email')?.value;
     const password = this.loginForm?.get('password')?.value;
     this._store.dispatch(login({ email, password }));
+  }
+
+  public  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
   }
 
   ngOnDestroy(): void {

@@ -16,11 +16,14 @@ export class CreateUserComponent implements OnInit {
   public isDarkTheme$ = this._store.select(selectIsDarkTheme);
   private _formBuilder = inject(FormBuilder);
   public errorMessage$ = this._store.select(selectErrorMessage);
+  public showPassword = false;
+  public showConfirmPassword = false;
 
   ngOnInit(): void {
     this.registerForm = this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
     });
   }
 
@@ -36,5 +39,13 @@ export class CreateUserComponent implements OnInit {
 
   ngOnDestroy(): void {
     this._store.dispatch(clearError());
+  }
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleShowConfirmPassword() {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }
