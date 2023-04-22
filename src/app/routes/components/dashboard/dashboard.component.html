@@ -4,22 +4,35 @@
     <div class="flex flex-wrap mt-6 justify-center">
       <div class="w-full md:w-1/2 xl:w-1/4 p-6 flex justify-center">
         <a
+          [ngClass]="{
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
+          }"
           [routerLink]="'/upload-pdf'"
-          class="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded"
-          >Upload PDF</a
+          class="hover:bg-blue-700 hover:text-white py-2 px-4 rounded"
         >
+          Submit PDF
+        </a>
       </div>
       <div class="w-full md:w-1/2 xl:w-1/4 p-6 flex justify-center">
         <a
+          [ngClass]="{
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
+          }"
           [routerLink]="'/update-profile'"
-          class="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded"
+          class="hover:bg-blue-700 hover:text-white py-2 px-4 rounded"
           >Edit Profile</a
         >
       </div>
       <div class="w-full md:w-1/2 xl:w-1/4 p-6 flex justify-center">
         <a
-          href="#"
-          class="bg-blue-500 text-white hover:bg-blue-700 py-2 px-4 rounded"
+          [ngClass]="{
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
+          }"
+          [routerLink]="'/upload-pdf'"
+          class="hover:bg-blue-700 hover:text-white py-2 px-4 rounded"
           >Change Username/Password</a
         >
       </div>

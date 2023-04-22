@@ -19,7 +19,7 @@
       (ngSubmit)="onSubmit()"
       class="mt-8 space-y-6"
     >
-      <div class="rounded-md shadow-sm">
+      <div class="shadow-sm">
         <div>
           <label for="email-address" class="sr-only">Email address</label>
           <input
@@ -28,7 +28,7 @@
             type="email"
             autocomplete="email"
             required
-            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+            class="appearance-none rounded-none relative block w-full px-3 py-2 placeholder-gray-500 text-gray-900 focus:outline-none sm:text-sm"
             placeholder="Email address"
           />
           <div
@@ -41,69 +41,60 @@
             This field is required.
           </div>
         </div>
-        <div class="relative mt-2">
+        <div class="relative mt-2 flex items-center bg-white">
           <label for="password" class="sr-only">Password</label>
-          <div class="relative">
-            <input
-              id="password"
-              formControlName="password"
-              [type]="showPassword ? 'text' : 'password'"
-              autocomplete="current-password"
-              required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mt-2"
-              placeholder="Password"
-            />
-            <div
-              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-            >
-              <i
-                (click)="toggleShowPassword()"
-                class="cursor-pointer"
-                [ngClass]="{
-                  'fa-solid fa-eye': showPassword,
-                  'fas fa-eye-slash': !showPassword
-                }"
-              ></i>
-            </div>
-          </div>
-          <div
-            *ngIf="
-              registerForm.get('password')?.touched &&
-              registerForm.get('password')?.hasError('required')
-            "
-            class="text-red-500 text-sm"
-          >
-            This field is required.
+          <input
+            id="password"
+            formControlName="password"
+            [type]="showPassword ? 'text' : 'password'"
+            autocomplete="current-password"
+            required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 placeholder-gray-500 text-gray-900 focus:outline-none sm:text-sm"
+            placeholder="Password"
+          />
+          <div class="ml-1 p-1">
+            <i
+              (click)="toggleShowPassword()"
+              class="cursor-pointer"
+              [ngClass]="{
+                'fa-solid fa-eye': showPassword,
+                'fas fa-eye-slash': !showPassword
+              }"
+            ></i>
           </div>
         </div>
-        <div class="relative mt-2">
+        <div
+          *ngIf="
+            registerForm.get('password')?.touched &&
+            registerForm.get('password')?.hasError('required')
+          "
+          class="text-red-500 text-sm"
+        >
+          This field is required.
+        </div>
+        <div class="relative mt-2 flex items-center bg-white">
           <label for="confirmPassword" class="sr-only">Confirm Password</label>
-          <div class="relative">
-            <input
-              id="confirmPassword"
-              formControlName="confirmPassword"
-              [type]="showConfirmPassword ? 'text' : 'password'"
-              required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Confirm Password"
-            />
-            <div
-              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-            >
-              <i
-                (click)="toggleShowConfirmPassword()"
-                class="cursor-pointer"
-                [ngClass]="{
-                  'fa-solid fa-eye': showConfirmPassword,
-                  'fas fa-eye-slash': !showConfirmPassword
-                }"
-              ></i>
-            </div>
+          <input
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            required
+            class="appearance-none rounded-none relative block w-full px-3 py-2 placeholder-gray-500 text-gray-900 focus:outline-none sm:text-sm"
+            placeholder="Confirm Password"
+          />
+          <div class="ml-1 p-1">
+            <i
+              (click)="toggleShowConfirmPassword()"
+              class="cursor-pointer"
+              [ngClass]="{
+                'fa-solid fa-eye': showConfirmPassword,
+                'fas fa-eye-slash': !showConfirmPassword
+              }"
+            ></i>
           </div>
         </div>
-        
-        
       </div>
+
       <div
         *ngIf="errorMessage$ | async"
         class="flex justify-center text-red-500 text-sm my-2"
@@ -122,4 +113,3 @@
     </form>
   </div>
 </div>
-
