@@ -1,0 +1,29 @@
+# .gitignore
+
+# Node.js specific
+node_app/node_modules/
+node_app/package-lock.json
+
+# Flask specific
+flask_app/__pycache__/
+flask_app/*.pyc
+flask_app/*.pyo
+flask_app/*.pyd
+flask_app/.Python
+flask_app/env/
+*.pyc
+
+
+# Log files
+*.log
+
+# Editor/IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# OS specific
+.DS_Store
+Thumbs.db
