@@ -40,3 +40,18 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+
+
+# Node.js specific
+/backend/node-express/node_modules/
+/backend/node-express/package-lock.json
+
+# Flask specific
+/backend/python-flask/__pycache__/
+/backend/python-flask/*.pyc
+/backend/python-flask/*.pyo
+/backend/python-flask/*.pyd
+/backend/python-flask/.Python
+/backend/python-flask/env/
+*.pyc
