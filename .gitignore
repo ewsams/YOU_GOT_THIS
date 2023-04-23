@@ -7,7 +7,6 @@
 /bazel-out
 
 # Node
-/node_modules
 npm-debug.log
 yarn-error.log
 
@@ -41,12 +40,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-
-
-# Node.js specific
-/backend/node-express/node_modules/
-/backend/node-express/package-lock.json
-
 # Flask specific
 /backend/python-flask/__pycache__/
 /backend/python-flask/*.pyc
@@ -55,3 +48,7 @@ Thumbs.db
 /backend/python-flask/.Python
 /backend/python-flask/env/
 *.pyc
+
+# Additional lock files
+/backend/node-express/package-lock.json
+/frontend/package-lock.json
