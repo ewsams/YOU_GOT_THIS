@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy-frontend": "node deploy.js"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +28,7 @@
     "@stripe/stripe-js": "^1.52.1",
     "@swimlane/ngx-charts": "^20.1.2",
     "@types/offscreencanvas": "^2019.7.0",
+    "dotenv": "^16.0.3",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^3.5.141",
     "rxjs": "~7.5.0",
