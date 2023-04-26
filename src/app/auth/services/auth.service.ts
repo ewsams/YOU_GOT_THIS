@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from 'src/app/common/models/user.model';
+import { environment } from 'src/enviroments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://you-got-this-ai-node-express-dev.us-west-2.elasticbeanstalk.com/api/auth';
+  private apiUrl = environment.nodeUrl + '/api/auth';
   private currentUserSubjectId: BehaviorSubject<any>;
   public currentUser$: Observable<any>;
 

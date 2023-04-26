@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Profile } from '../models/profile.model';
+import { environment } from 'src/enviroments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private readonly apiUrl = 'http://you-got-this-ai-node-express-dev.us-west-2.elasticbeanstalk.com/api/profile';
+  private readonly apiUrl = environment.nodeUrl + '/api/profile';
 
   constructor(private _http: HttpClient) {}
 

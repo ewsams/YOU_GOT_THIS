@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PdfTokenCount } from '../models/pdf-token-count.model';
+import { environment } from 'src/enviroments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PdfService {
-  private apiUrl = 'http://you-got-this-ai-python-flask-dev.us-west-2.elasticbeanstalk.com';
+  private apiUrl = environment.flaskUrl;
 
   constructor(private _http: HttpClient) {}
 
