@@ -8,7 +8,7 @@ import { User } from 'src/app/common/models/user.model';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = 'http://you-got-this-ai-node-express-dev.us-west-2.elasticbeanstalk.com/api/auth';
   private currentUserSubjectId: BehaviorSubject<any>;
   public currentUser$: Observable<any>;
 
@@ -38,7 +38,7 @@ export class AuthService {
 
   public login(email: string, password: string): Observable<User> {
     return this.http
-      .post<any>(`${this.apiUrl}/login`, { email, password })
+      .post<User>(`${this.apiUrl}/login`, { email, password })
       .pipe(
         map((user) => {
           if (user && user.accessToken) {

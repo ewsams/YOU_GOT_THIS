@@ -7,7 +7,7 @@ import { Profile } from '../models/profile.model';
   providedIn: 'root',
 })
 export class ProfileService {
-  private readonly apiUrl = 'http://localhost:3000/api/profile';
+  private readonly apiUrl = 'http://you-got-this-ai-node-express-dev.us-west-2.elasticbeanstalk.com/api/profile';
 
   constructor(private _http: HttpClient) {}
 

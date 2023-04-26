@@ -7,8 +7,8 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.317.0",
     "aws-sdk": "^2.1363.0",
-    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -19,6 +19,6 @@
     "nodemon": "^2.0.22"
   },
   "engines": {
-    "node": "14.x"
+    "node": "18.x"
   }
 }

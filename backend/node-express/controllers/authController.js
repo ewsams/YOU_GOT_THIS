@@ -1,7 +1,22 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const crypto = require("crypto");
+const util = require("util");
 require("dotenv").config();
+
+const scrypt = util.promisify(crypto.scrypt);
+
+const hashPassword = async (password) => {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hashedPassword = await scrypt(password, salt, 64);
+  return `${salt}:${hashedPassword.toString("hex")}`;
+};
+
+const verifyPassword = async (password, storedHash) => {
+  const [salt, hash] = storedHash.split(":");
+  const passwordHash = await scrypt(password, salt, 64);
+  return passwordHash.toString("hex") === hash;
+};
 
 const generateAccessToken = (userId) => {
   return jwt.sign({ userId }, `${process.env.JWT_SECRET_KEY}`, {
@@ -24,8 +39,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await hashPassword(password);
 
     const newUser = new User({
       email,
@@ -55,7 +69,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -93,8 +107,5 @@ exports.refreshToken = async (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  // Since JWT tokens are stateless, you can't explicitly invalidate them.
-  // To implement logout, you can simply delete the token on the client side,
-  // or use short-lived tokens and refresh tokens.
   res.status(200).json({ message: "Logged out" });
 };

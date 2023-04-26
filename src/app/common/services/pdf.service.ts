@@ -7,7 +7,7 @@ import { PdfTokenCount } from '../models/pdf-token-count.model';
   providedIn: 'root',
 })
 export class PdfService {
-  private apiUrl = 'http://127.0.0.1:5000';
+  private apiUrl = 'http://you-got-this-ai-python-flask-dev.us-west-2.elasticbeanstalk.com';
 
   constructor(private _http: HttpClient) {}
 

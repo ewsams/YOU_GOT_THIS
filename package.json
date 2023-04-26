@@ -7,7 +7,7 @@
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy-frontend": "node deploy.js"
+    "deploy-frontend": "ng build node deploy.js"
   },
   "private": true,
   "dependencies": {

@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import tiktoken
 
-app = Flask(__name__)
-CORS(app)
+application = Flask(__name__)
+CORS(application)
 
 def num_tokens_from_string(string, encoding_name):
     """Returns the number of tokens in a text string."""
@@ -11,7 +11,7 @@ def num_tokens_from_string(string, encoding_name):
     num_tokens = len(encoding.encode(string))
     return num_tokens
 
-@app.route('/api/count-tokens', methods=['POST'])
+@application.route('/api/count-tokens', methods=['POST'])
 def count_tokens():
     data = request.json
     text = data['text']
@@ -21,4 +21,4 @@ def count_tokens():
     return jsonify(token_count=token_count, cost=cost)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)

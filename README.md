@@ -49,7 +49,7 @@ In the root directory of the project, you'll find a Node Express app that needs 
 2. Run `npm install` to install the required dependencies.
 3. Run `node app.js` or `npm start` to start the Node Express app.
 
-The app should now be running on the specified port, usually `http://localhost:3000`.
+The app should now be running on the specified port, usually `http://localhost:8081`.
 
 ## Running the Python Flask App
 
@@ -70,3 +70,20 @@ Before running the application, add the following line to the top of the `node_m
 ```typescript
 declare type OffscreenRenderingContext = any;
 ```
+
+## Build and deploy the front end application
+1. First run the `ng build` command 
+2. Next after the app has built run the `npm run deploy-frontend` command
+
+## Backend Node
+The following command will initialize the node backend to the elastic-beanstalk instance 
+`eb init -p "Node.js" app.js`
+
+the following comand will deploy and rebuild the curren node application 
+`eb deploy`
+
+## Backend 
+Both Ports for the Node and Python app need to be changed to 8081 
+before deploying to Elastic Beanstalk
+
+--update the .env files and the application.py file if not correct.

@@ -1,15 +1,35 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 require("dotenv").config();
+const cors = require("cors");
+
+const allowedOrigins = [
+  "http://you-got-this-front-end.s3-website-us-east-1.amazonaws.com", 
+  "http://localhost:4200"
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  optionsSuccessStatus: 200,
+  credentials: true
+};
+
+
 
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors(corsOptions));
+
 
 mongoose
   .connect(
@@ -27,3 +47,6 @@ app.use("/api/profile/", profileRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
+
+
