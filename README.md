@@ -17,9 +17,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-
 The npm `deploy-frontend` command deploys the front end to the deployed AWS bucket.
-
 
 ### Code scaffolding
 
@@ -72,18 +70,23 @@ declare type OffscreenRenderingContext = any;
 ```
 
 ## Build and deploy the front end application
-1. First run the `ng build` command 
+
+1. First run the `ng build` command
 2. Next after the app has built run the `npm run deploy-frontend` command
+3. Make sure to install the aws-cli
+4. Also make sure to the elastic-beanstalk-cli as well
 
 ## Backend Node
-The following command will initialize the node backend to the elastic-beanstalk instance 
+
+The following command will initialize the node backend to the elastic-beanstalk instance
 `eb init -p "Node.js" app.js`
 
-the following comand will deploy and rebuild the curren node application 
+the following comand will deploy and rebuild the curren node application
 `eb deploy`
 
-## Backend 
-Both Ports for the Node and Python app need to be changed to 8081 
+## Backend
+
+Both Ports for the Node and Python app need to be changed to 8081
 before deploying to Elastic Beanstalk
 
 --update the .env files and the application.py file if not correct.
