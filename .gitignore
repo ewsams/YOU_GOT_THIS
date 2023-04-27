@@ -53,6 +53,3 @@ Thumbs.db
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-# Environment files
-/src/environments/*.ts
-

@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class PdfService {
-  private apiUrl = 'http://' + environment.flaskUrl;
+  private apiUrl = environment.flaskUrl;
 
   constructor(private _http: HttpClient) {}
 
