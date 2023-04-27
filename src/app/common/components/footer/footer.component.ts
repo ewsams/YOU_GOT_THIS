@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
+import { FooterCategorySection } from '../../models/footer-category-section';
 
 @Component({
   selector: 'app-footer',
@@ -10,18 +12,30 @@ import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
 export class FooterComponent {
   protected _store = inject(Store);
   public isDarkTheme$ = this._store.select(selectIsDarkTheme);
-  public categorySections: { title: string; links: string[] }[] = [
+  public categorySections: Array<FooterCategorySection> = [
     {
       title: 'CATEGORIES',
-      links: ['First Link', 'Second Link', 'Third Link', 'Fourth Link'],
+      links: [
+        { label: 'First Link', path: '#' },
+        { label: 'Second Link', path: '#' },
+        { label: 'Privacy Policy', path: '/privacy-policy' },
+      ],
     },
     {
       title: 'CATEGORIES',
-      links: ['First Link', 'Second Link', 'Third Link', 'Fourth Link'],
+      links: [
+        { label: 'First Link', path: '#' },
+        { label: 'Second Link', path: '#' },
+        { label: 'Third Link', path: '#' },
+      ],
     },
     {
       title: 'CATEGORIES',
-      links: ['First Link', 'Second Link', 'Third Link', 'Fourth Link'],
+      links: [
+        { label: 'First Link', path: '#' },
+        { label: 'Second Link', path: '#' },
+        { label: 'Third Link', path: '#' },
+      ],
     },
   ];
 }
