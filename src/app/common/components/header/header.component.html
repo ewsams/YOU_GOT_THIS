@@ -1,51 +1,116 @@
 <header class="body-font">
-  <div class="container mx-auto p-5 flex flex-col items-center md:flex-row">
+  <div
+    class="container mx-auto p-5 flex flex-col items-center md:flex-row"
+    [ngClass]="{
+      'justify-between': (currentUser$ | async)
+    }"
+  >
     <div class="flex items-center justify-center w-full md:w-auto">
-      <a class="flex title-font font-medium items-center md:justify-start justify-center" [routerLink]="'/home'">
+      <a
+        class="flex title-font font-medium items-center md:justify-start justify-center"
+        [routerLink]="'/home'"
+      >
         <img src="assets/images-icons/you_got_this_logo.svg" alt="" />
-        <span class="ml-3 text-xl md:text-2xl" [ngClass]="{
+        <span
+          class="ml-3 text-xl md:text-2xl"
+          [ngClass]="{
             'text-gray-900': !(isDarkTheme$ | async),
             'text-white': (isDarkTheme$ | async)
-          }">
+          }"
+        >
           You Got This AI
         </span>
       </a>
     </div>
-    <nav class="mt-4 md:mt-0 md:mx-auto md:py-1 md:pl-4  md:text-base text-center" [ngClass]="{
+    <nav
+      class="mt-4 md:mt-0 md:mx-auto md:py-1 md:pl-4 md:text-base text-center"
+      [ngClass]="{
         'text-gray-900': !(isDarkTheme$ | async),
         'text-white': (isDarkTheme$ | async)
-      }">
-      <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/plans'">Available Plans</a>
-      <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/about'">About Us</a>
+      }"
+      *ngIf="(currentUser$ | async) === null"
+    >
+      <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/plans'"
+        >Available Plans</a
+      >
+      <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/about'"
+        >About Us</a
+      >
       <a class="mr-5 hover:text-blue-500 text-sm">Third Link</a>
     </nav>
     <div class="flex items-center mt-4 md:mt-0">
-      <button (click)="toggleTheme()" class="relative inline-block w-14 align-middle select-none">
-        <label for="theme-toggle" class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"></label>
+      <button
+        (click)="toggleTheme()"
+        *ngIf="(currentUser$ | async) === null"
+        class="relative inline-block w-14 align-middle select-none"
+      >
+        <label
+          for="theme-toggle"
+          class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"
+        ></label>
         <span class="toggle-icon absolute top-0.5 left-1.5 text-sm">
           <span>
             {{ (isDarkTheme$ | async) ? "☀️" : "🌙" }}
           </span>
         </span>
       </button>
-      <div *ngIf="(currentUser$ | async) === null; else userSection" class="ml-4">
-        <button [routerLink]="'/login'" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+      <div
+        *ngIf="(currentUser$ | async) === null; else userSection"
+        class="ml-4"
+      >
+        <button
+          [routerLink]="'/login'"
+          [ngClass]="{
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
+          }"
+          class="px-4 py-2 rounded hover:bg-blue-700 hover:text-white"
+        >
           Sign In
         </button>
       </div>
       <ng-template #userSection>
         <div class="flex items-center">
-          <button (click)="signOut()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <button
+            (click)="toggleTheme()"
+            class="relative inline-block w-14 align-middle select-none"
+          >
+            <label
+              for="theme-toggle"
+              class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"
+            ></label>
+            <span class="toggle-icon absolute top-0.5 left-1.5 text-sm">
+              <span>
+                {{ (isDarkTheme$ | async) ? "☀️" : "🌙" }}
+              </span>
+            </span>
+          </button>
+          <button
+            (click)="signOut()"
+            [ngClass]="{
+              'text-gray-900': !(isDarkTheme$ | async),
+              'text-white': (isDarkTheme$ | async)
+            }"
+            class="px-4 py-2 rounded hover:bg-blue-700 hover:text-white"
+          >
             Sign Out
           </button>
-          <img *ngIf="profile$ | async as profile" [src]="
+
+          <img
+            *ngIf="profile$ | async as profile"
+            [src]="
               profile.imageUrl
                 ? profile.imageUrl
                 : 'assets/images-icons/default-avatar-icon.svg'
-            " alt="Avatar" class="rounded-full ml-6 md:ml-8" [ngClass]="{
+            "
+            alt="Avatar"
+            class="rounded-full ml-6 md:ml-8"
+            [ngClass]="{
               'h-12 w-12 md:h-16 md:w-16 shadow-lg': profile.imageUrl,
-              'h-8 w-8': !profile.imageUrl
-            }" [routerLink]="'/dashboard'" />
+              'h-8 w-8 px-4 py-2': !profile.imageUrl
+            }"
+            [routerLink]="'/dashboard'"
+          />
         </div>
       </ng-template>
     </div>
