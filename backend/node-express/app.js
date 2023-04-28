@@ -5,8 +5,8 @@ require("dotenv").config();
 const cors = require("cors");
 
 const allowedOrigins = [
-  "http://you-got-this-front-end.s3-website-us-east-1.amazonaws.com", 
-  "http://localhost:4200"
+  "http://you-got-this-front-end.s3-website-us-east-1.amazonaws.com",
+  "http://localhost:4200",
 ];
 
 const corsOptions = {
@@ -18,18 +18,16 @@ const corsOptions = {
     }
   },
   optionsSuccessStatus: 200,
-  credentials: true
+  credentials: true,
 };
-
-
 
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
+const blogRoutes = require("./routes/postRoutes");
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
-
 
 mongoose
   .connect(
@@ -44,9 +42,7 @@ mongoose
 
 app.use("/api/auth/", authRoutes);
 app.use("/api/profile/", profileRoutes);
+app.use("/api/blogposts", blogRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
-
-
-

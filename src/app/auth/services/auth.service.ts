@@ -13,6 +13,9 @@ export class AuthService {
   private currentUserSubjectId: BehaviorSubject<any>;
   public currentUser$: Observable<any>;
 
+  private _isAdminLoggedIn = new BehaviorSubject<boolean>(false);
+  public isAdminLoggedIn$ = this._isAdminLoggedIn.asObservable();
+
   constructor(private http: HttpClient) {
     this.currentUserSubjectId = new BehaviorSubject<string>('');
     this.currentUser$ = this.currentUserSubjectId.asObservable();
@@ -63,5 +66,17 @@ export class AuthService {
       const parsedUser = JSON.parse(storedUser);
       this.currentUserSubjectId.next(parsedUser.userId);
     }
+  }
+
+  public loginAsBlogAdmin(username: string, password: string): boolean {
+    if (username === 'edward' && password === 'admin') {
+      this._isAdminLoggedIn.next(true);
+      return true;
+    }
+    return false;
+  }
+
+  public logoutAdmin(): void {
+    this._isAdminLoggedIn.next(false);
   }
 }

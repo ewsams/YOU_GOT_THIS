@@ -1,0 +1,93 @@
+<div
+  class="container mx-auto px-4 sm:px-6 lg:px-8 py-12"
+  [ngClass]="{
+    'text-gray-900': !(isDarkTheme$ | async),
+    'text-white': (isDarkTheme$ | async)
+  }"
+>
+  <div class="shadow-md rounded-lg p-6 sm:p-8 lg:p-10">
+    <form (submit)="onSubmit()" enctype="multipart/form-data">
+      <div class="mb-4">
+        <label for="title" class="block text-sm font-bold mb-2">Title:</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          [(ngModel)]="blogPost.title"
+          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Enter blog post title"
+          required
+        />
+      </div>
+      <div class="mb-4">
+        <label for="author" class="block text-sm font-bold mb-2">Author:</label>
+        <input
+          type="text"
+          id="author"
+          name="author"
+          [(ngModel)]="blogPost.author"
+          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Enter author name"
+          required
+        />
+      </div>
+      <div class="mb-4">
+        <label for="content" class="block text-sm font-bold mb-2"
+          >Content:</label
+        >
+        <textarea
+          id="content"
+          name="content"
+          [(ngModel)]="blogPost.content"
+          rows="6"
+          class="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="Enter blog post content"
+          required
+        ></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="images" class="block text-sm font-bold mb-2"
+          >Images (up to 6):</label
+        >
+
+        <button
+          type="button"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          (click)="selectFiles.click()"
+        >
+          Select Images(s)
+        </button>
+        <input
+          #selectFiles
+          hidden
+          type="file"
+          id="images"
+          name="images"
+          (change)="onFileSelected($event)"
+          class="py-2 px-3"
+          multiple
+          accept="image/*"
+        />
+      </div>
+      <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <ng-container *ngFor="let img of imagePreviews">
+          <div class="w-full h-24 relative">
+            <img
+              [src]="img"
+              class="absolute inset-0 w-full h-full object-contain object-center rounded"
+            />
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <button
+          type="submit"
+          class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+          Upload Post
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

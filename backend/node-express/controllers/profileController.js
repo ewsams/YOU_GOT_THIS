@@ -36,7 +36,7 @@ const upload = multer({ storage, fileFilter: imageFileFilter });
 
 const uploadToS3 = async (file) => {
   const params = {
-    Bucket: `${process.env.AWS_S3_BUCKET_NAME}`,
+    Bucket: `${process.env.AWS_S3_PROFILE_BUCKET_NAME}`,
     Key: `profile-images/${Date.now()}-${file.originalname}`,
     Body: file.buffer,
     ContentType: file.mimetype,
@@ -48,7 +48,7 @@ const uploadToS3 = async (file) => {
         reject(error);
       } else {
         resolve(
-          `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`
+          `https://${process.env.AWS_S3_PROFILE_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`
         );
       }
     });
@@ -57,7 +57,7 @@ const uploadToS3 = async (file) => {
 
 const deleteFromS3 = async (imageUrl) => {
   const s3Params = {
-    Bucket: `${process.env.AWS_S3_BUCKET_NAME}`,
+    Bucket: `${process.env.AWS_S3_PROFILE_BUCKET_NAME}`,
     Key: imageUrl.split("/").slice(-2).join("/"),
   };
 

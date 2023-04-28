@@ -1,0 +1,39 @@
+<div
+  class="min-h-screen flex items-center justify-center"
+  [ngClass]="{
+    'text-gray-900': !(isDarkTheme$ | async),
+    'text-white': (isDarkTheme$ | async)
+  }"
+>
+  <form
+    class="shadow-md rounded-lg p-8"
+    (ngSubmit)="onSubmit()"
+    autocomplete="off"
+  >
+    <h2 class="text-2xl font-bold mb-6">Login</h2>
+    <div class="mb-4">
+      <label class="block mb-2">Username</label>
+      <input
+        [(ngModel)]="username"
+        name="username"
+        type="text"
+        class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none"
+      />
+    </div>
+    <div class="mb-6">
+      <label class="block mb-2">Password</label>
+      <input
+        [(ngModel)]="password"
+        name="password"
+        type="password"
+        class="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none"
+      />
+    </div>
+    <button
+      type="submit"
+      class="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600"
+    >
+      Login
+    </button>
+  </form>
+</div>

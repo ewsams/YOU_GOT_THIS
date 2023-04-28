@@ -40,7 +40,10 @@
         </h2>
         <nav class="list-none mb-10">
           <li *ngFor="let link of section.links">
-            <a class="hover:text-blue-500 text-white" [routerLink]="link.path"
+            <a
+              class="hover:text-blue-500 text-white"
+              [routerLink]="link.path"
+              (click)="scrollToTop()"
               >{{ link.label }}
             </a>
           </li>

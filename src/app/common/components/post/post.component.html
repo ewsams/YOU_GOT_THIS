@@ -1,0 +1,52 @@
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12" *ngIf="blogPosts">
+  <div *ngFor="let blogPost of blogPosts">
+    <div class="bg-white shadow-md rounded-lg p-6 sm:p-8 lg:p-10 mb-8">
+      <h2 class="text-2xl font-bold mb-1">{{ blogPost.title }}</h2>
+      <p class="text-gray-600 mb-4">By {{ blogPost.author }}</p>
+
+      <div class="prose mb-4">
+        <p [innerHTML]="blogPost.content"></p>
+      </div>
+
+      <div class="mb-4">
+        <ng-container *ngIf="blogPost.images.length === 1">
+          <img
+            [src]="blogPost.images[0]"
+            alt="Blog Post Image"
+            class="w-full object-cover rounded-lg"
+          />
+        </ng-container>
+        <ng-container *ngIf="blogPost.images.length === 2">
+          <div class="grid grid-cols-2 gap-4">
+            <ng-container *ngFor="let image of blogPost.images">
+              <div>
+                <img
+                  [src]="image"
+                  alt="Blog Post Image"
+                  class="w-full object-cover rounded-lg"
+                />
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="blogPost.images.length > 2">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <ng-container *ngFor="let image of blogPost.images">
+              <div>
+                <img
+                  [src]="image"
+                  alt="Blog Post Image"
+                  class="w-full object-cover rounded-lg"
+                />
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="prose">
+        <p [innerHTML]="blogPost.content"></p>
+      </div>
+    </div>
+  </div>
+</div>
