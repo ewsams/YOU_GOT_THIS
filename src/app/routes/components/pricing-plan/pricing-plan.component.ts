@@ -10,7 +10,7 @@ import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
   styleUrls: ['./pricing-plan.component.scss'],
 })
 export class PricingPlanComponent {
-  public isAnnual: boolean = false;
+  public isAnnual = false;
   protected pricingPlans: Array<PricingPlan> = PRICING_PLANS;
   protected _store = inject(Store);
   public isDarkTheme$ = this._store.select(selectIsDarkTheme);

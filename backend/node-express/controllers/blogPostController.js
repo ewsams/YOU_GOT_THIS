@@ -2,7 +2,7 @@ require("dotenv").config();
 const { S3Client } = require("@aws-sdk/client-s3");
 const { Upload } = require("@aws-sdk/lib-storage");
 const multer = require("multer");
-const BlogPost = require("../models/blogPost");
+const BlogPost = require("../models/BlogPost");
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,

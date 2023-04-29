@@ -19,7 +19,11 @@ const corsOptions = {
   },
   optionsSuccessStatus: 200,
   credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
+  exposedHeaders: ["Access-Control-Allow-Origin"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
 };
+
 
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");

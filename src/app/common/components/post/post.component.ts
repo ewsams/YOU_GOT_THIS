@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BlogPost } from '../../models/blog-post.model';
 import { BlogPostService } from '../../services/blog-post.service';
+import { Store } from '@ngrx/store';
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
 
 @Component({
   selector: 'app-post',
@@ -10,6 +12,8 @@ import { BlogPostService } from '../../services/blog-post.service';
 })
 export class PostComponent implements OnInit {
   public blogPosts: Array<BlogPost> | undefined;
+  private _store = inject(Store);
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
 
   constructor(
     private blogPostService: BlogPostService,
