@@ -6,9 +6,8 @@ import { CommonRoutingModule, routeComponents } from './common-routing.module';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PdfUploadComponent } from './components/pdf-upload/pdf-upload.component';
-import { PostComponent } from './components/post/post.component';
-import { CreatePostComponent } from './components/create-post/create-post.component';
 import { BlogLoginComponent } from './components/blog-login/blog-login.component';
+import { PdfChatComponent } from './components/pdf-chat/pdf-chat.component';
 
 const components = [HeaderComponent, FooterComponent, PdfUploadComponent];
 

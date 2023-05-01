@@ -1,57 +1,54 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { PdfTokenCount } from '../models/pdf-token-count.model';
-import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs'
+import { PdfTokenCount } from '../models/pdf-token-count.model'
+import { environment } from 'src/environments/environment'
 
 @Injectable({
   providedIn: 'root',
 })
 export class PdfService {
-  private apiUrl = environment.flaskUrl;
+  private apiUrl = environment.flaskUrl
 
   constructor(private _http: HttpClient) {}
 
-  public countTokensWithEncoding(
-    text: string,
-    encoding_name: string
-  ): Observable<PdfTokenCount> {
+  public countTokensWithEncoding(text: string, encoding_name: string): Observable<PdfTokenCount> {
     return this._http.post<PdfTokenCount>(`${this.apiUrl}/api/count-tokens`, {
       text,
       encoding_name,
-    });
+    })
   }
 
   public async extractTextContent(pdfDoc: any): Promise<string> {
-    const totalPages = pdfDoc.numPages;
-    const pageTextPromises = [];
+    const totalPages = pdfDoc.numPages
+    const pageTextPromises = []
 
     for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-      const page = await pdfDoc.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      const textItems = textContent.items.map((item: any) => item.str);
-      const textStr = textItems.join(' ');
-      pageTextPromises.push(textStr);
+      const page = await pdfDoc.getPage(pageNum)
+      const textContent = await page.getTextContent()
+      const textItems = textContent.items.map((item: any) => item.str)
+      const textStr = textItems.join(' ')
+      pageTextPromises.push(textStr)
     }
 
-    const allPagesText = await Promise.all(pageTextPromises);
-    return allPagesText.join('\n');
+    const allPagesText = await Promise.all(pageTextPromises)
+    return allPagesText.join('\n')
   }
 
   public countWords(text: string): number {
-    const words = text.match(/\b(\w+)\b/g);
-    return words ? words.length : 0;
+    const words = text.match(/\b(\w+)\b/g)
+    return words ? words.length : 0
   }
 
   public formatFileSize(size: number): string {
     if (size < 1024) {
-      return size + ' B';
+      return size + ' B'
     } else if (size < 1024 * 1024) {
-      return (size / 1024).toFixed(2) + ' KB';
+      return (size / 1024).toFixed(2) + ' KB'
     } else if (size < 1024 * 1024 * 1024) {
-      return (size / (1024 * 1024)).toFixed(2) + ' MB';
+      return (size / (1024 * 1024)).toFixed(2) + ' MB'
     } else {
-      return (size / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+      return (size / (1024 * 1024 * 1024)).toFixed(2) + ' GB'
     }
   }
 
@@ -74,8 +71,21 @@ export class PdfService {
       tokenCount:
         'The total number of tokens in the PDF document based on the selected encoding. This information is essential for generating vector embeddings, as each token will be mapped to a vector in the embedding space. The token count also serves as an indicator of the processing complexity and resources needed for tasks such as similarity computation and clustering.',
       cost: 'The estimated cost to process the PDF document based on token count and selected encoding. This includes the time and resources required for generating vector embeddings, tokenization, and other related processing tasks. Estimating the cost can help in planning and optimizing system resources for efficient processing of large collections of documents.',
-    };
+    }
 
-    return explanations[key] || '';
+    return explanations[key] || ''
+  }
+
+  public embedAndUploadPdf(pdfFile: File): Observable<any> {
+    // Change the parameter type to File
+    const formData = new FormData()
+    formData.append('pdf_file', pdfFile)
+    return this._http.post<any>(`${this.apiUrl}/api/embed-and-upload-pdf`, formData)
+  }
+
+  public queryEmbeddedPdf(query: string): Observable<any> {
+    const formData = new FormData()
+    formData.append('query', query)
+    return this._http.post<any>(`${this.apiUrl}/api/query-embedded-pdf`, formData)
   }
 }
