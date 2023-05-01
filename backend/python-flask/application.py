@@ -1,9 +1,9 @@
 import os
 from flask_cors import CORS
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify
 import openai
 from dotenv import load_dotenv
-from PyPDF2 import PdfReader
+import pdfplumber
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.vectorstores import FAISS
@@ -56,12 +56,12 @@ def embed_and_upload_pdf():
         tempfile.mkdtemp(), secure_filename(pdf_file.filename))
     pdf_file.save(pdf_file_path)
 
-    reader = PdfReader(pdf_file_path)
     raw_text = ''
-    for i, page in enumerate(reader.pages):
-        text = page.extract_text()
-        if text:
-            raw_text += text
+    with pdfplumber.open(pdf_file_path) as pdf:
+        for page in pdf.pages:
+            text = page.extract_text()
+            if text:
+                raw_text += text
 
     text_splitter = CharacterTextSplitter(
         separator="\n",
