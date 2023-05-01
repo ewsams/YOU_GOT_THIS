@@ -17,9 +17,7 @@
       <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
         Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical.
       </p>
-      <div
-        class="flex mx-auto border-2 border-blue-500 rounded overflow-hidden mt-6"
-      >
+      <div class="flex mx-auto border-2 border-blue-500 rounded overflow-hidden mt-6">
         <button
           class="py-1 px-4 bg-blue-500 text-white focus:outline-none"
           [ngClass]="{
@@ -47,6 +45,9 @@
         <div class="p-4 xl:w-1/4 md:w-1/2 w-full">
           <div
             class="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden"
+            [ngClass]="{
+              'bg-gray-900': (isDarkTheme$ | async)
+            }"
           >
             <span
               *ngIf="plan.title === 'PRO'"
@@ -62,9 +63,7 @@
             >
               {{ plan.title }}
             </h2>
-            <h1
-              class="text-5xl pb-4 mb-4 border-b border-gray-200 leading-none"
-            >
+            <h1 class="text-5xl pb-4 mb-4 border-b border-gray-200 leading-none">
               {{ isAnnual ? plan.annualCost : plan.monthlyCost }}
             </h1>
             <ng-container *ngFor="let planDetail of plan.items">

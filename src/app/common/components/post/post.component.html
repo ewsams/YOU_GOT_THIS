@@ -1,11 +1,14 @@
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12" *ngIf="blogPosts">
   <div *ngFor="let blogPost of blogPosts" class="mb-8">
-    <div class="shadow-lg rounded-lg p-6 sm:p-8 lg:p-10" [ngClass]="{
-      'text-gray-900': !(isDarkTheme$ | async),
-      'text-white': (isDarkTheme$ | async)
-    }">
+    <div
+      class="shadow-lg rounded-lg p-6 sm:p-8 lg:p-10"
+      [ngClass]="{
+        'text-gray-900': !(isDarkTheme$ | async),
+        'text-white bg-gray-900': (isDarkTheme$ | async)
+      }"
+    >
       <h2 class="text-2xl font-bold mb-1">{{ blogPost.title }}</h2>
-      <p class=" mb-4">By {{ blogPost.author }}</p>
+      <p class="mb-4">By {{ blogPost.author }}</p>
 
       <div class="prose mb-4">
         <p [innerHTML]="blogPost.content"></p>
@@ -14,7 +17,7 @@
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <ng-container *ngFor="let image of blogPost.images">
           <div class="relative overflow-hidden rounded-lg">
-            <img [src]="image" alt="Blog Post Image" class="w-full h-full object-cover">
+            <img [src]="image" alt="Blog Post Image" class="w-full h-full object-cover" />
           </div>
         </ng-container>
       </div>
