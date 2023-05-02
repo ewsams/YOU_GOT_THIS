@@ -41,6 +41,7 @@
         </div>
 
         <div *ngIf="isLoadingAnswer" class="my-4 text-center">
+          <p class="text-blue-500">Thinking...</p>
           <i class="fas fa-spinner fa-spin text-blue-500"></i>
         </div>
 
@@ -53,7 +54,6 @@
           </div>
         </div>
         <div class="mb-4 relative">
-          <!-- Add the arrow icon for submitting the question -->
           <button (click)="onSubmitQuery()" class="absolute bottom-0 right-0 mb-2 mr-2 text-blue-500 p-1">
             <i class="fa-solid fa-paper-plane"></i>
           </button>

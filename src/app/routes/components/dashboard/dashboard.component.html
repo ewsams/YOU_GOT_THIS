@@ -106,7 +106,12 @@
       </div>
     </div>
     <!-- Graph -->
-    <div class="w-full p-6 border rounded shadow">
+    <div
+      class="w-full p-6 border rounded shadow"
+      [ngClass]="{
+        'bg-gray-900': (isDarkTheme$ | async)
+      }"
+    >
       <div class="flex items-center">
         <div class="text-center w-full">
           <h2
@@ -121,7 +126,7 @@
           <div
             [ngClass]="{
               'light-theme': !(isDarkTheme$ | async),
-              'dark-theme': (isDarkTheme$ | async)
+              'dark-theme': (isDarkTheme$ | async),
             }"
           >
             <ngx-charts-bar-vertical
