@@ -20,6 +20,9 @@ openai.api_key = OPENAI_API_KEY
 
 docsearch = None
 chain = None
+audio_transcript = None
+embedded_audio_summary = None
+
 
 application = Flask(__name__)
 CORS(application, resources={r"*": {"origins": ["http://localhost:4200",
@@ -31,6 +34,20 @@ def num_tokens_from_string(string, encoding_name):
     encoding = tiktoken.get_encoding(encoding_name)
     num_tokens = len(encoding.encode(string))
     return num_tokens
+
+
+def audio_summarizer(audio_file_path, system_prompt):
+    audio_file = open(audio_file_path, "rb")
+    transcript = openai.Audio.transcribe("whisper-1", audio_file)
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user",
+                "content": f"Summarize the following transcript into key bullet points:\n{transcript['text']}"}
+        ]
+    )
+    return response['choices'][0]['message']['content']
 
 
 @application.route('/api/count-tokens', methods=['POST'])
@@ -88,6 +105,46 @@ def query_embedded_pdf():
 
     query = request.form.get('query')
     docs = docsearch.similarity_search(query)
+    answer = chain.run(input_documents=docs, question=query)
+
+    return jsonify({"answer": answer})
+
+
+@application.route('/api/upload-audio', methods=['POST'])
+def upload_audio():
+    global audio_transcript, embedded_audio_summary, chain
+
+    # Check if an audio file was uploaded
+    if 'audio_file' not in request.files:
+        return jsonify({"error": "No audio file provided."})
+
+    audio_file = request.files['audio_file']
+    audio_file_path = os.path.join(
+        tempfile.mkdtemp(), secure_filename(audio_file.filename))
+    audio_file.save(audio_file_path)
+
+    # Call the audio_summarizer function with a generic system prompt
+    audio_transcript = audio_summarizer(
+        audio_file_path, "You are a language model good at creating summaries.")
+
+    # Embed the audio transcript summary
+    embeddings = OpenAIEmbeddings(
+        openai_api_key=OPENAI_API_KEY, model="text-embedding-ada-002", chunk_size=1000)
+    embedded_audio_summary = FAISS.from_texts([audio_transcript], embeddings)
+    chain = load_qa_chain(
+        OpenAI(openai_api_key=OPENAI_API_KEY))
+
+    return jsonify({"message": "Audio file uploaded, summarized, and embedded successfully."})
+
+
+@application.route('/api/query-uploaded-audio', methods=['POST'])
+def query_uploaded_audio():
+    global embedded_audio_summary, chain
+    if embedded_audio_summary is None or chain is None:
+        return jsonify({"error": "Please upload an audio file before querying."})
+
+    query = request.form.get('query')
+    docs = embedded_audio_summary.similarity_search(query)
     answer = chain.run(input_documents=docs, question=query)
 
     return jsonify({"answer": answer})

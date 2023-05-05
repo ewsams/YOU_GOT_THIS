@@ -6,33 +6,33 @@ import { takeUntil } from 'rxjs'
 import { FileService } from '../../services/file.service'
 
 @Component({
-  selector: 'app-pdf-chat',
-  templateUrl: './pdf-chat.component.html',
-  styleUrls: ['./pdf-chat.component.scss'],
+  selector: 'app-audio-chat',
+  templateUrl: './audio-chat.component.html',
+  styleUrls: ['./audio-chat.component.scss'],
 })
-export class PdfChatComponent extends SubResolver {
+export class AudioChatComponent extends SubResolver {
   public isDarkTheme$ = this._store.select(selectIsDarkTheme)
   public qaHistory: { query: string; answer: string }[] = []
   public query = ''
   public answer = ''
   public isLoadingAnswer = false
-  public pdfLoading = false
-  public pdfUploaded = false
+  public audioLoading = false
+  public audioUploaded = false
 
   constructor(private _fileService: FileService, private _store: Store) {
     super()
   }
 
-  public onUploadPdf(event: any) {
-    this.pdfLoading = true
-    const pdfFile = event.target.files[0]
+  public onUploadAudio(event: any) {
+    this.audioLoading = true
+    const audioFile = event.target.files[0]
     this._fileService
-      .embedAndUploadPdf(pdfFile)
+      .uploadAudio(audioFile)
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
-        if (res.message === 'PDF embedded and uploaded successfully.') {
-          this.pdfLoading = false
-          this.pdfUploaded = true
+        if (res.message === 'Audio file uploaded, summarized, and embedded successfully.') {
+          this.audioLoading = false
+          this.audioUploaded = true
         }
       })
   }
@@ -40,7 +40,7 @@ export class PdfChatComponent extends SubResolver {
   public onSubmitQuery() {
     this.isLoadingAnswer = true
     this._fileService
-      .queryEmbeddedPdf(this.query)
+      .queryUploadedAudio(this.query)
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         this.answer = res.answer
@@ -54,7 +54,7 @@ export class PdfChatComponent extends SubResolver {
     this.query = ''
     this.answer = ''
     this.qaHistory = []
-    this.pdfLoading = false
-    this.pdfUploaded = false
+    this.audioLoading = false
+    this.audioUploaded = false
   }
 }

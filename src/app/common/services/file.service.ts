@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment'
 @Injectable({
   providedIn: 'root',
 })
-export class PdfService {
+export class FileService {
   private apiUrl = environment.flaskUrl
 
   constructor(private _http: HttpClient) {}
@@ -87,5 +87,17 @@ export class PdfService {
     const formData = new FormData()
     formData.append('query', query)
     return this._http.post<any>(`${this.apiUrl}/api/query-embedded-pdf`, formData)
+  }
+
+  public uploadAudio(audioFile: File): Observable<any> {
+    const formData = new FormData()
+    formData.append('audio_file', audioFile)
+    return this._http.post<any>(`${this.apiUrl}/api/upload-audio`, formData)
+  }
+
+  public queryUploadedAudio(query: string): Observable<any> {
+    const formData = new FormData()
+    formData.append('query', query)
+    return this._http.post<any>(`${this.apiUrl}/api/query-uploaded-audio`, formData)
   }
 }

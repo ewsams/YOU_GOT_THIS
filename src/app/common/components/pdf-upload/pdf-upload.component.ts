@@ -1,18 +1,12 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { PDFDocument } from 'pdf-lib';
-import { Store } from '@ngrx/store';
-import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
-import { PdfService } from '../../services/pdf.service';
-import { SubResolver } from '../../helpers/sub-resolver';
-import { takeUntil } from 'rxjs';
-import { PdfMetrics } from '../../models/pdf-metrics.model';
-import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
+import { PDFDocument } from 'pdf-lib'
+import { Store } from '@ngrx/store'
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
+import { SubResolver } from '../../helpers/sub-resolver'
+import { takeUntil } from 'rxjs'
+import { PdfMetrics } from '../../models/pdf-metrics.model'
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors'
+import { FileService } from '../../services/file.service'
 
 @Component({
   selector: 'app-pdf-upload',
@@ -21,96 +15,95 @@ import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
 })
 export class PdfUploadComponent extends SubResolver implements OnInit {
   @ViewChild('progressBar', { static: false })
-  progressBar!: ElementRef;
+  progressBar!: ElementRef
 
-  private _pdfService = inject(PdfService);
+  private _fileService = inject(FileService)
 
-  protected selectedEncoding = 'cl100k_base';
-  protected file: File | null = null;
-  protected metrics: PdfMetrics = {};
-  protected loading = false;
-  protected progress = 0;
-  protected _store = inject(Store);
-  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
+  protected selectedEncoding = 'cl100k_base'
+  protected file: File | null = null
+  protected metrics: PdfMetrics = {}
+  protected loading = false
+  protected progress = 0
+  protected _store = inject(Store)
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme)
 
   ngOnInit(): void {}
 
   public onFileSelect(event: Event): void {
-    const target = event.target as HTMLInputElement;
+    const target = event.target as HTMLInputElement
     if (target.files && target.files.length > 0) {
-      this.file = target.files[0];
-      this.readPDF(this.file);
+      this.file = target.files[0]
+      this.readPDF(this.file)
     }
   }
 
   public async readPDF(file: File): Promise<void> {
-    GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.worker.min.js';
-    this.loading = true;
-    const fileReader = new FileReader();
+    GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.worker.min.js'
+    this.loading = true
+    const fileReader = new FileReader()
     fileReader.onload = async () => {
-      const pdfBytes = new Uint8Array(fileReader.result as ArrayBuffer);
-      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const pdfBytes = new Uint8Array(fileReader.result as ArrayBuffer)
+      const pdfDoc = await PDFDocument.load(pdfBytes)
       this.metrics = {
         pageCount: pdfDoc.getPageCount(),
         title: pdfDoc.getTitle(),
         author: pdfDoc.getAuthor(),
         subject: pdfDoc.getSubject(),
-        fileSize: this._pdfService.formatFileSize(file.size),
-      };
+        fileSize: this._fileService.formatFileSize(file.size),
+      }
 
-      const pdfJsDoc = await getDocument({ data: pdfBytes }).promise;
-      const textContent = await this._pdfService.extractTextContent(pdfJsDoc);
-      this.metrics.wordCount = this._pdfService.countWords(textContent);
+      const pdfJsDoc = await getDocument({ data: pdfBytes }).promise
+      const textContent = await this._fileService.extractTextContent(pdfJsDoc)
+      this.metrics.wordCount = this._fileService.countWords(textContent)
 
-      const encoding_name = this.selectedEncoding;
-      this._pdfService
+      const encoding_name = this.selectedEncoding
+      this._fileService
         .countTokensWithEncoding(textContent, encoding_name)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (result) => {
-            this.metrics.tokenCount = result.token_count;
-            this.metrics.encodingName = encoding_name;
-            this.metrics.cost = result.cost;
-            this.loading = false;
-            this.progress = 100;
-            this.updateProgressBar(this.progress);
+            this.metrics.tokenCount = result.token_count
+            this.metrics.encodingName = encoding_name
+            this.metrics.cost = result.cost
+            this.loading = false
+            this.progress = 100
+            this.updateProgressBar(this.progress)
           },
           error: (error) => {
-            console.error('Error fetching token count:', error);
-            this.loading = false;
+            console.error('Error fetching token count:', error)
+            this.loading = false
           },
-        });
-    };
+        })
+    }
     fileReader.onprogress = (event) => {
       if (event.lengthComputable) {
-        this.progress = Math.round((event.loaded / event.total) * 75);
-        this.updateProgressBar(this.progress);
+        this.progress = Math.round((event.loaded / event.total) * 75)
+        this.updateProgressBar(this.progress)
       }
-    };
-    fileReader.readAsArrayBuffer(file);
+    }
+    fileReader.readAsArrayBuffer(file)
   }
 
   protected resetMetrics(): void {
-    this.metrics = {};
-    this.file = null;
-    this.progress = 0;
+    this.metrics = {}
+    this.file = null
+    this.progress = 0
   }
 
   public get metricEntries(): Array<{
-    key: string;
-    value: string | number;
-    explanation: string;
+    key: string
+    value: string | number
+    explanation: string
   }> {
     return Object.entries(this.metrics).map(([key, value]) => {
-      const convertedKey = this.toTitleCase(this.splitCamelCase(key));
-      const explanation = this._pdfService.getMetricExplanation(key);
-      return { key: convertedKey, value, explanation };
-    });
+      const convertedKey = this.toTitleCase(this.splitCamelCase(key))
+      const explanation = this._fileService.getMetricExplanation(key)
+      return { key: convertedKey, value, explanation }
+    })
   }
 
   private splitCamelCase(key: string): string {
-    return key.replace(/([a-z0-9])([A-Z])/g, '$1 $2');
+    return key.replace(/([a-z0-9])([A-Z])/g, '$1 $2')
   }
 
   private toTitleCase(str: string): string {
@@ -118,12 +111,12 @@ export class PdfUploadComponent extends SubResolver implements OnInit {
       .toLowerCase()
       .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+      .join(' ')
   }
 
   private updateProgressBar(progress: number): void {
     if (this.progressBar) {
-      this.progressBar.nativeElement.style.width = `${progress}%`;
+      this.progressBar.nativeElement.style.width = `${progress}%`
     }
   }
 }

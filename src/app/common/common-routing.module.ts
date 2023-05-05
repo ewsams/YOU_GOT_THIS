@@ -6,6 +6,7 @@ import { PostComponent } from './components/post/post.component'
 import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component'
 import { BlogAdminGuard } from '../auth/guards/blog-admin.guard'
 import { PdfChatComponent } from './components/pdf-chat/pdf-chat.component'
+import { AudioChatComponent } from './components/audio-chat/audio-chat.component'
 
 export const routeComponents = [
   PrivacyPolicyComponent,
@@ -13,6 +14,7 @@ export const routeComponents = [
   CreatePostComponent,
   BlogLoginComponent,
   PdfChatComponent,
+  AudioChatComponent,
 ]
 
 export const routes: Routes = [
@@ -30,6 +32,10 @@ export const routes: Routes = [
   {
     path: 'pdf-chat',
     component: PdfChatComponent,
+  },
+  {
+    path: 'audio-chat',
+    component: AudioChatComponent,
   },
 ]
 

@@ -1,0 +1,32 @@
+textarea {
+    resize: none;
+}
+
+/* Set the width for extra small devices (mobile) */
+.query-input {
+    width: 24rem;
+    font-weight: 200;
+  }
+
+  
+  /* Set the width for medium devices (desktops) */
+  @media (min-width: 768px) {
+    .query-input {
+      width: 36rem;
+    }
+  }
+  
+  /* Set the width for large devices (large desktops) */
+  @media (min-width: 1024px) {
+    .query-input {
+      width: 48rem;
+    }
+  }
+  
+  /* Set the width for extra large devices (extra large desktops) */
+  @media (min-width: 1280px) {
+    .query-input {
+      width: 60rem;
+    }
+  }
+  
