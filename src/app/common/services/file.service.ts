@@ -3,17 +3,19 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { PdfTokenCount } from '../models/pdf-token-count.model'
 import { environment } from 'src/environments/environment'
+import { QaHistory } from '../models/qa-history.model'
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileService {
-  private apiUrl = environment.flaskUrl
+  private flaskApiUrl = environment.flaskUrl
+  private expressApiUrl = environment.nodeUrl
 
   constructor(private _http: HttpClient) {}
 
   public countTokensWithEncoding(text: string, encoding_name: string): Observable<PdfTokenCount> {
-    return this._http.post<PdfTokenCount>(`${this.apiUrl}/api/count-tokens`, {
+    return this._http.post<PdfTokenCount>(`${this.flaskApiUrl}/api/count-tokens`, {
       text,
       encoding_name,
     })
@@ -80,24 +82,48 @@ export class FileService {
     // Change the parameter type to File
     const formData = new FormData()
     formData.append('pdf_file', pdfFile)
-    return this._http.post<any>(`${this.apiUrl}/api/embed-and-upload-pdf`, formData)
+    return this._http.post<any>(`${this.flaskApiUrl}/api/embed-and-upload-pdf`, formData)
   }
 
   public queryEmbeddedPdf(query: string): Observable<any> {
     const formData = new FormData()
     formData.append('query', query)
-    return this._http.post<any>(`${this.apiUrl}/api/query-embedded-pdf`, formData)
+    return this._http.post<any>(`${this.flaskApiUrl}/api/query-embedded-pdf`, formData)
   }
 
   public uploadAudio(audioFile: File): Observable<any> {
     const formData = new FormData()
     formData.append('audio_file', audioFile)
-    return this._http.post<any>(`${this.apiUrl}/api/upload-audio`, formData)
+    return this._http.post<any>(`${this.flaskApiUrl}/api/upload-audio`, formData)
   }
 
   public queryUploadedAudio(query: string): Observable<any> {
     const formData = new FormData()
     formData.append('query', query)
-    return this._http.post<any>(`${this.apiUrl}/api/query-uploaded-audio`, formData)
+    return this._http.post<any>(`${this.flaskApiUrl}/api/query-uploaded-audio`, formData)
+  }
+
+  public createQaHistory(qaHistory: QaHistory): Observable<QaHistory> {
+    return this._http.post<QaHistory>(`${this.expressApiUrl}/api/qa-history/create`, qaHistory)
+  }
+
+  public getQaHistoryByUserId(userId: string): Observable<QaHistory[]> {
+    return this._http.get<QaHistory[]>(`${this.expressApiUrl}/api/qa-history/user/${userId}`)
+  }
+
+  public getQaHistoryByChatId(chatId: string): Observable<QaHistory> {
+    return this._http.get<QaHistory>(`${this.expressApiUrl}/api/qa-history/chat/${chatId}`)
+  }
+
+  public getEmbeddingsByChatId(chatId: string): Observable<any> {
+    return this._http.get<any>(`${this.expressApiUrl}/api/qa-history/embeddings/${chatId}`)
+  }
+
+  public updateQaHistory(id: string, qaHistory: QaHistory): Observable<QaHistory> {
+    return this._http.put<QaHistory>(`${this.expressApiUrl}/api/qa-history/update/${id}`, qaHistory)
+  }
+
+  public deleteQaHistory(id: string): Observable<any> {
+    return this._http.delete<any>(`${this.expressApiUrl}/api/qa-history/delete/${id}`)
   }
 }

@@ -12,14 +12,13 @@ const qaSchema = new mongoose.Schema({
 });
 
 const qaHistorySchema = new mongoose.Schema({
-  user: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  chat: {
+  chatId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Chat",
     required: true,
   },
   qa: [qaSchema],

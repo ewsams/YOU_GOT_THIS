@@ -7,6 +7,7 @@ import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-poli
 import { BlogAdminGuard } from '../auth/guards/blog-admin.guard'
 import { PdfChatComponent } from './components/pdf-chat/pdf-chat.component'
 import { AudioChatComponent } from './components/audio-chat/audio-chat.component'
+import { LoginGuard } from '../auth/guards/login-guard.guard'
 
 export const routeComponents = [
   PrivacyPolicyComponent,
@@ -32,10 +33,12 @@ export const routes: Routes = [
   {
     path: 'pdf-chat',
     component: PdfChatComponent,
+    canActivate: [() => inject(LoginGuard).canActivate()],
   },
   {
     path: 'audio-chat',
     component: AudioChatComponent,
+    canActivate: [() => inject(LoginGuard).canActivate()],
   },
 ]
 

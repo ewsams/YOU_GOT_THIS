@@ -36,6 +36,17 @@
           >Change Username/Password</a
         >
       </div>
+      <div class="w-full md:w-1/2 xl:w-1/4 p-6 flex justify-center">
+        <a
+          [ngClass]="{
+            'text-gray-900': !(isDarkTheme$ | async),
+            'text-white': (isDarkTheme$ | async)
+          }"
+          [routerLink]="'/audio-chat'"
+          class="hover:bg-blue-700 hover:text-white py-2 px-4 rounded"
+          >Audio Chat</a
+        >
+      </div>
     </div>
     <div class="flex flex-wrap">
       <!-- User Plan -->

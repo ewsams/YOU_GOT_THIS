@@ -8,7 +8,7 @@ const {
 } = require("@aws-sdk/client-s3");
 
 const s3Client = new S3Client({
-  region: `${process.env.AWS_REGION}`,
+  region: `${process.env.AWS_REGION_OREGON}`,
   credentials: {
     accessKeyId: `${process.env.AWS_ACCESS_KEY_ID}`,
     secretAccessKey: `${process.env.AWS_SECRET_ACCESS_KEY}`,
@@ -20,28 +20,29 @@ const uploadToS3 = async (file, keyPrefix = "embeddings") => {
   const fileContent = JSON.stringify(file);
 
   const params = {
-    Bucket: `${process.env.AWS_S3_PROFILE_BUCKET_NAME}`,
+    Bucket: `${process.env.AWS_S3_EMBEDDINGS_BUCKET}`,
     Key: `${keyPrefix}/${fileName}`,
     Body: fileContent,
     ContentType: "application/json",
   };
 
   return new Promise((resolve, reject) => {
-    s3.send(new PutObjectCommand(params), (error, data) => {
+    s3Client.send(new PutObjectCommand(params), (error, data) => {
       if (error) {
         reject(error);
       } else {
         resolve(
-          `https://${process.env.AWS_S3_PROFILE_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`
+          `https://${process.env.AWS_S3_EMBEDDINGS_BUCKET}.s3.${process.env.AWS_REGION_OREGON}.amazonaws.com/${params.Key}`
         );
       }
     });
   });
 };
 
+
 const downloadFromS3 = async (embeddingsUrl) => {
   const s3Params = {
-    Bucket: `${process.env.AWS_S3_PROFILE_BUCKET_NAME}`,
+    Bucket: `${process.env.AWS_S3_EMBEDDINGS_BUCKET}`,
     Key: embeddingsUrl.split("/").slice(-2).join("/"),
   };
 
@@ -76,8 +77,8 @@ exports.createQaHistory = async (req, res) => {
     const embeddingsUrl = await uploadToS3(embeddings);
 
     const newQaHistory = new QaHistory({
-      user: userId,
-      chat: chatId,
+      userId,
+      chatId: chatId || new mongoose.Types.ObjectId(), // Use provided chatId or create a new ObjectId
       qa,
       embeddingsUrl,
     });
@@ -101,8 +102,8 @@ exports.updateQaHistory = async (req, res) => {
       return res.status(404).json({ message: "QA History not found" });
     }
 
-    qaHistory.user = userId;
-    qaHistory.chat = chatId;
+    qaHistory.userId = userId;
+    qaHistory.chatId = chatId;
     qaHistory.qa = qa;
 
     if (embeddings) {
@@ -141,7 +142,7 @@ exports.getQaHistoryByUserId = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const qaHistories = await QaHistory.find({ user: userId });
+    const qaHistories = await QaHistory.find({ userId: userId });
 
     res.status(200).json(qaHistories);
   } catch (error) {
@@ -154,7 +155,7 @@ exports.getQaHistoryByChatId = async (req, res) => {
   const { chatId } = req.params;
 
   try {
-    const qaHistory = await QaHistory.findOne({ chat: chatId });
+    const qaHistory = await QaHistory.findOne({ chatId: chatId });
 
     if (!qaHistory) {
       return res.status(404).json({ message: "QA History not found" });
@@ -169,10 +170,10 @@ exports.getQaHistoryByChatId = async (req, res) => {
 
 exports.getEmbeddingsByChatId = async (req, res) => {
   try {
-    const { chat_id } = req.params;
+    const { chatId} = req.params;
 
     // Find the QaHistory entry by chat_id
-    const qaHistory = await QaHistory.findOne({ chat: chat_id });
+    const qaHistory = await QaHistory.findOne({ chat: chatId });
 
     if (!qaHistory) {
       return res.status(404).json({ message: "QA History not found" });
