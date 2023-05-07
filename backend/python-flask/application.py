@@ -198,7 +198,11 @@ def query_uploaded_embeddings_pdf():
 
 @application.route('/api/reset-embeddings', methods=['POST'])
 def reset_embeddings():
-    global downloaded_embeddings
+    global docsearch, chain, audio_transcript, embedded_audio_summary, downloaded_embeddings
+    docsearch = None
+    chain = None
+    audio_transcript = None
+    embedded_audio_summary = None
     downloaded_embeddings = None
     return jsonify({"message": "Embeddings reset successfully."})
 
