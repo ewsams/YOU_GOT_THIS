@@ -1,5 +1,7 @@
+import json
 import os
 from flask_cors import CORS
+import numpy as np
 from flask import Flask, request, jsonify
 import openai
 from dotenv import load_dotenv
@@ -12,16 +14,19 @@ from langchain.llms import OpenAI
 import tiktoken
 from werkzeug.utils import secure_filename
 import tempfile
+import requests
 
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv('OPEN_API_KEY')
 openai.api_key = OPENAI_API_KEY
 
+# Global variables
 docsearch = None
 chain = None
 audio_transcript = None
 embedded_audio_summary = None
+downloaded_embeddings = None
 
 
 application = Flask(__name__)
@@ -93,8 +98,9 @@ def embed_and_upload_pdf():
     docsearch = FAISS.from_texts(texts, embeddings)
     chain = load_qa_chain(
         OpenAI(openai_api_key=OPENAI_API_KEY))
-
-    return jsonify({"message": "PDF embedded and uploaded successfully."})
+    docsearch_json = json.dumps(docsearch.index.reconstruct(0).tolist())
+    return jsonify({"message": "PDF embedded and uploaded successfully.",
+                    "docsearch": docsearch_json})
 
 
 @application.route('/api/query-embedded-pdf', methods=['POST'])
@@ -134,7 +140,10 @@ def upload_audio():
     chain = load_qa_chain(
         OpenAI(openai_api_key=OPENAI_API_KEY))
 
-    return jsonify({"message": "Audio file uploaded, summarized, and embedded successfully."})
+    embedded_audio_summary_json = json.dumps(
+        embedded_audio_summary.index.reconstruct(0).tolist())
+    return jsonify({"message": "Audio file uploaded, summarized, and embedded successfully.",
+                    "embedded_audio_summary": embedded_audio_summary_json})
 
 
 @application.route('/api/query-uploaded-audio', methods=['POST'])
@@ -148,6 +157,50 @@ def query_uploaded_audio():
     answer = chain.run(input_documents=docs, question=query)
 
     return jsonify({"answer": answer})
+
+
+@application.route('/api/query-uploaded-embeddings-audio', methods=['POST'])
+def query_uploaded_embeddings_audio():
+    global chain, downloaded_embeddings
+
+    data = request.get_json()
+    embeddings_url = data["embeddings_url"]
+    query = data["query"]
+
+    if downloaded_embeddings is None:
+        # Download the embeddings from the S3 bucket
+        response = requests.get(embeddings_url)
+        if response.status_code != 200:
+            return jsonify({"error": "Failed to download embeddings from S3."})
+        downloaded_embeddings = np.array(json.loads(response.text))
+
+    uploaded_audio_embeddings = np.array([downloaded_embeddings])
+
+    docs = FAISS.similarity_search(uploaded_audio_embeddings, query)
+    answer = chain.run(input_documents=docs, question=query)
+
+    return jsonify({"answer": answer})
+
+
+@application.route('/api/query-uploaded-embeddings-pdf', methods=['POST'])
+def query_uploaded_embeddings_pdf():
+    global chain
+
+    embeddings_json = request.get_json()
+    uploaded_pdf_embeddings = np.array([embeddings_json["embeddings"]])
+
+    query = request.form.get('query')
+    docs = FAISS.similarity_search(uploaded_pdf_embeddings, query)
+    answer = chain.run(input_documents=docs, question=query)
+
+    return jsonify({"answer": answer})
+
+
+@application.route('/api/reset-embeddings', methods=['POST'])
+def reset_embeddings():
+    global downloaded_embeddings
+    downloaded_embeddings = None
+    return jsonify({"message": "Embeddings reset successfully."})
 
 
 if __name__ == '__main__':

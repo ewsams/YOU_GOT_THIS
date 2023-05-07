@@ -28,6 +28,7 @@ const corsOptions = {
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const blogRoutes = require("./routes/postRoutes");
+const qaHistory = require("./routes/qaHistoryRoutes");
 
 const app = express();
 app.use(bodyParser.json());
@@ -47,6 +48,8 @@ mongoose
 app.use("/api/auth/", authRoutes);
 app.use("/api/profile/", profileRoutes);
 app.use("/api/blogposts", blogRoutes);
+app.use("/api/qa-history", qaHistory);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
