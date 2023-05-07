@@ -30,8 +30,11 @@ downloaded_embeddings = None
 
 
 application = Flask(__name__)
+
 CORS(application, resources={r"*": {"origins": ["http://localhost:4200",
      "http://you-got-this-front-end.s3-website-us-east-1.amazonaws.com"]}})
+
+application.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100 MB limit
 
 
 def num_tokens_from_string(string, encoding_name):
