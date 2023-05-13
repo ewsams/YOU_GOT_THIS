@@ -5,10 +5,19 @@
     'text-white': (isDarkTheme$ | async)
   }"
 >
-  <div *ngFor="let qaHistory of qaHistories" (click)="selectQaHistory(qaHistory)">
-    <div>{{ qaHistory.created_at | date : 'MMM d, y, h:mm a' }}</div>
-    <div class="date-container">
-      <input [(ngModel)]="qaHistory.title" (change)="updateTitle(qaHistory, qaHistory.title)" />
+  <button class="lg:hidden mb-4 ml-3" (click)="toggleMobileMenu()">
+    <i class="fas fa-bars"></i>
+  </button>
+  <ng-container *ngIf="!isMobileMenuHidden || !isMobile">
+    <div *ngFor="let qaHistory of qaHistories" (click)="selectQaHistory(qaHistory)" class="mb-4 ml-2">
+      <div class="font-normal text-xs">{{ qaHistory.created_at | date : 'MMM d, y, h:mm a' }}</div>
+      <div class="mt-1">
+        <input
+          [(ngModel)]="qaHistory.title"
+          (change)="updateTitle(qaHistory, qaHistory.title)"
+          class="bg-transparent w-11/12 text-xl border-b border-dashed border-gray-600 truncate"
+        />
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>

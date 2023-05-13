@@ -13,6 +13,8 @@ export class ChatHistorySidbarComponent implements OnInit {
   @Input() mediaType: 'pdf' | 'audio' | undefined
   @Output() qaHistorySelected = new EventEmitter<any>()
   public isDarkTheme$ = this._store.select(selectIsDarkTheme)
+  public isMobileMenuHidden = true
+  public isMobile = false
 
   public qaHistories: any[] = []
 
@@ -20,9 +22,13 @@ export class ChatHistorySidbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchQaHistories()
+    this.isMobile = window.innerWidth < 1024
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth < 1024
+    })
   }
 
-  fetchQaHistories(): void {
+  public fetchQaHistories(): void {
     if (this.userId) {
       this._fileService.getQaHistoriesByUserIdAndType(this.userId, this.mediaType).subscribe((qaHistories) => {
         this.qaHistories = qaHistories.sort(
@@ -32,12 +38,16 @@ export class ChatHistorySidbarComponent implements OnInit {
     }
   }
 
-  selectQaHistory(qaHistory: any): void {
+  public selectQaHistory(qaHistory: any): void {
     this.qaHistorySelected.emit(qaHistory)
   }
 
-  updateTitle(qaHistory: any, newTitle: string): void {
+  public updateTitle(qaHistory: any, newTitle: string): void {
     qaHistory.title = newTitle
     this._fileService.updateQaHistory(qaHistory._id, qaHistory).subscribe()
+  }
+
+  public toggleMobileMenu(): void {
+    this.isMobileMenuHidden = !this.isMobileMenuHidden
   }
 }

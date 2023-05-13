@@ -1,97 +1,100 @@
 <div class="min-h-screen flex flex-col items-center justify-start sm:py-12">
-  <div class="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl sm:mx-auto">
+  <div class="container flex flex-col sm:flex-row w-full">
     <app-chat-history-sidbar
+      class="sidebar mr-0 sm:mr-8 mb-4 sm:mb-0"
       [userId]="userId"
       (qaHistorySelected)="onQaHistorySelected($event)"
     ></app-chat-history-sidbar>
-    <div class="p-4 query-input w-full">
-      <div
-        class="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden"
-        [ngClass]="{
-          'bg-gray-900': (isDarkTheme$ | async),
-          'bg-white': !(isDarkTheme$ | async)
-        }"
-      >
-        <button
-          (click)="resetComponent()"
+    <div class="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl sm:mx-auto">
+      <div class="p-4 query-input w-full">
+        <div
+          class="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden"
           [ngClass]="{
-            'text-gray-900': !(isDarkTheme$ | async),
-            'text-white': (isDarkTheme$ | async)
+            'bg-gray-900': (isDarkTheme$ | async),
+            'bg-white': !(isDarkTheme$ | async)
           }"
-          class="absolute top-4 right-4 hover:bg-red-500 hover:text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors duration-200"
         >
-          Reset Chat
-        </button>
-        <div class="my-2">
-          <label
-            for="title"
-            class="block text-sm font-medium"
+          <button
+            (click)="resetComponent()"
             [ngClass]="{
               'text-gray-900': !(isDarkTheme$ | async),
               'text-white': (isDarkTheme$ | async)
             }"
-            >Title</label
+            class="absolute top-4 right-4 hover:bg-red-500 hover:text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline transition-colors duration-200"
           >
-          <input
-            type="text"
-            id="title"
-            name="title"
-            [(ngModel)]="title"
-            class="mt-1 p-1 border-solid border-2 border-sky-500 block sm:text-sm rounded-md w-full"
-          />
-        </div>
+            Reset Chat
+          </button>
+          <div class="my-2">
+            <label
+              for="title"
+              class="block text-sm font-medium"
+              [ngClass]="{
+                'text-gray-900': !(isDarkTheme$ | async),
+                'text-white': (isDarkTheme$ | async)
+              }"
+              >Title</label
+            >
+            <input
+              type="text"
+              id="title"
+              name="title"
+              [(ngModel)]="title"
+              class="mt-1 p-1 border-solid border-2 border-sky-500 block sm:text-sm rounded-md w-full"
+            />
+          </div>
 
-        <div class="mt-2">
-          <button (click)="audioUpload.click()" class="bg-blue-500 w-full text-white">Select Audio</button>
-          <input
-            #audioUpload
-            hidden
-            type="file"
-            id="audioFile"
-            name="audioFile"
-            accept="audio/*"
-            (change)="onUploadAudio($event)"
-          />
-          <div *ngIf="audioLoading" class="my-4 text-center text-blue-500">
-            Uploading Audio...
-            <div class="my-4 text-center">
-              <i class="fas fa-spinner fa-spin text-blue-500"></i>
+          <div class="mt-2">
+            <button (click)="audioUpload.click()" class="bg-blue-500 w-full text-white">Select Audio</button>
+            <input
+              #audioUpload
+              hidden
+              type="file"
+              id="audioFile"
+              name="audioFile"
+              accept="audio/*"
+              (change)="onUploadAudio($event)"
+            />
+            <div *ngIf="audioLoading" class="my-4 text-center text-blue-500">
+              Uploading Audio...
+              <div class="my-4 text-center">
+                <i class="fas fa-spinner fa-spin text-blue-500"></i>
+              </div>
+            </div>
+            <div *ngIf="!audioLoading && audioUploaded" class="my-4 text-center text-blue-500">
+              Audio uploaded successfully!
             </div>
           </div>
-          <div *ngIf="!audioLoading && audioUploaded" class="my-4 text-center text-blue-500">
-            Audio uploaded successfully!
-          </div>
-        </div>
 
-        <div *ngIf="isLoadingAnswer" class="my-4 text-center">
-          <p class="text-blue-500">Thinking...</p>
-          <i class="fas fa-spinner fa-spin text-blue-500"></i>
-        </div>
+          <div *ngIf="isLoadingAnswer" class="my-4 text-center">
+            <p class="text-blue-500">Thinking...</p>
+            <i class="fas fa-spinner fa-spin text-blue-500"></i>
+          </div>
 
-        <div *ngFor="let item of qaHistory" class="mt-6">
-          <div class="bg-gray-100 p-4 rounded-lg">
-            <span class="font-semibold text-blue-500">Question:</span> {{ item.query }}
+          <div *ngFor="let item of qaHistory" class="mt-6">
+            <div class="bg-gray-100 p-4 rounded-lg">
+              <span class="font-semibold text-blue-500">Question:</span> {{ item.query }}
+            </div>
+            <div class="bg-blue-100 p-4 rounded-lg mt-4">
+              <span class="font-semibold text-blue-500">Answer:</span> {{ item.answer }}
+            </div>
           </div>
-          <div class="bg-blue-100 p-4 rounded-lg mt-4">
-            <span class="font-semibold text-blue-500">Answer:</span> {{ item.answer }}
+          <div class="mb-4 relative">
+            <button (click)="onSubmitQuery()" class="absolute bottom-0 right-0 mb-2 mr-2 text-blue-500 p-1">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+            <textarea
+              id="query"
+              name="query"
+              rows="3"
+              [(ngModel)]="query"
+              [disabled]="audioLoading"
+              class="p-3 mt-3 bg-white rounded-md text-gray-900 w-full leading-4 h-auto pl-3 pr-10 pb-6 border-solid border-2 border-sky-500"
+              [ngClass]="{
+                'border-gray-300': !(isDarkTheme$ | async),
+                'border-gray-700': (isDarkTheme$ | async)
+              }"
+            ></textarea>
           </div>
-        </div>
-        <div class="mb-4 relative">
-          <button (click)="onSubmitQuery()" class="absolute bottom-0 right-0 mb-2 mr-2 text-blue-500 p-1">
-            <i class="fa-solid fa-paper-plane"></i>
-          </button>
-          <textarea
-            id="query"
-            name="query"
-            rows="3"
-            [(ngModel)]="query"
-            [disabled]="audioLoading"
-            class="p-3 mt-3 bg-white rounded-md text-gray-900 w-full leading-4 h-auto pl-3 pr-10 pb-6 border-solid border-2 border-sky-500"
-            [ngClass]="{
-              'border-gray-300': !(isDarkTheme$ | async),
-              'border-gray-700': (isDarkTheme$ | async)
-            }"
-          ></textarea>
         </div>
       </div>
     </div>
