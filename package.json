@@ -30,7 +30,6 @@
     "@swimlane/ngx-charts": "^20.1.2",
     "@types/offscreencanvas": "^2019.7.0",
     "dotenv": "^16.0.3",
-    "mongoose": "^7.1.0",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^3.5.141",
     "rxjs": "~7.5.0",

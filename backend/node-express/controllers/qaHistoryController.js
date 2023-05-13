@@ -66,7 +66,7 @@ const downloadFromS3 = async (embeddingsUrl) => {
 };
 
 exports.createQaHistory = async (req, res) => {
-  const { userId, chatId, qa, embeddings } = req.body;
+  const { userId, qa, embeddings, mediaType } = req.body;
 
   try {
     const user = await User.findById(userId);
@@ -78,9 +78,9 @@ exports.createQaHistory = async (req, res) => {
 
     const newQaHistory = new QaHistory({
       userId,
-      chatId: chatId || new mongoose.Types.ObjectId(), // Use provided chatId or create a new ObjectId
       qa,
       embeddingsUrl,
+      mediaType,
     });
 
     await newQaHistory.save();
@@ -94,7 +94,7 @@ exports.createQaHistory = async (req, res) => {
 
 exports.updateQaHistory = async (req, res) => {
   const { id } = req.params;
-  const { userId, chatId, qa, embeddings } = req.body;
+  const { userId, qa, embeddings, mediaType } = req.body;
 
   try {
     const qaHistory = await QaHistory.findById(id);
@@ -103,8 +103,8 @@ exports.updateQaHistory = async (req, res) => {
     }
 
     qaHistory.userId = userId;
-    qaHistory.chatId = chatId;
     qaHistory.qa = qa;
+    qaHistory.mediaType = mediaType;
 
     if (embeddings) {
       const embeddingsUrl = await uploadToS3(embeddings);
@@ -119,6 +119,7 @@ exports.updateQaHistory = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 exports.deleteQaHistory = async (req, res) => {
   const { id } = req.params;
@@ -151,11 +152,11 @@ exports.getQaHistoryByUserId = async (req, res) => {
   }
 };
 
-exports.getQaHistoryByChatId = async (req, res) => {
-  const { chatId } = req.params;
+exports.getQaHistoryById = async (req, res) => {
+  const { id } = req.params;
 
   try {
-    const qaHistory = await QaHistory.findOne({ chatId: chatId });
+    const qaHistory = await QaHistory.findById(id);
 
     if (!qaHistory) {
       return res.status(404).json({ message: "QA History not found" });
@@ -168,12 +169,12 @@ exports.getQaHistoryByChatId = async (req, res) => {
   }
 };
 
-exports.getEmbeddingsByChatId = async (req, res) => {
+exports.getEmbeddingsByQaHistoryId = async (req, res) => {
   try {
-    const { chatId} = req.params;
+    const { id } = req.params;
 
-    // Find the QaHistory entry by chat_id
-    const qaHistory = await QaHistory.findOne({ chat: chatId });
+    // Find the QaHistory entry by id
+    const qaHistory = await QaHistory.findById(id);
 
     if (!qaHistory) {
       return res.status(404).json({ message: "QA History not found" });
@@ -188,3 +189,25 @@ exports.getEmbeddingsByChatId = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.getQaHistoriesByUserIdAndType = async (req, res) => {
+  const { userId } = req.params;
+  const { mediaType } = req.query;
+
+  try {
+    let query = QaHistory.find({ userId: userId });
+
+    if (mediaType) {
+      query = query.where("mediaType", mediaType);
+    }
+
+    const qaHistories = await query.exec();
+
+    res.status(200).json(qaHistories);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+

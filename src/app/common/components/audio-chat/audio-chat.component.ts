@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core'
 import { Store } from '@ngrx/store'
 import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors'
 import { SubResolver } from '../../helpers/sub-resolver'
-import { switchMap, takeUntil, tap } from 'rxjs'
+import { catchError, of, switchMap, takeUntil, tap } from 'rxjs'
 import { FileService } from '../../services/file.service'
 import { selectUserId } from 'src/app/store/auth/auth.selectors'
-import * as mongoose from 'mongoose'
 
 @Component({
   selector: 'app-audio-chat',
@@ -23,6 +22,7 @@ export class AudioChatComponent extends SubResolver implements OnInit {
   public audioUploaded = false
   public embeddings: any
   public userId: string | undefined
+  private qaHistoryId: string | undefined
 
   constructor(private _fileService: FileService, private _store: Store) {
     super()
@@ -47,32 +47,50 @@ export class AudioChatComponent extends SubResolver implements OnInit {
         }),
         switchMap((audio) => {
           if (audio.message === 'Audio file uploaded, summarized, and embedded successfully.') {
-            const newChatId = new mongoose.Types.ObjectId() // Generate a new ObjectId for chatId
             return this._fileService.createQaHistory({
               userId: this.userId as string,
-              chatId: newChatId.toHexString(), // Convert the ObjectId to a hex string
               qa: [],
               embeddingsUrl: '',
+              mediaType: 'audio',
             })
           } else {
-            throw new Error('Failed to upload audio')
+            return of(undefined)
           }
         }),
+        catchError((error) => {
+          console.log(error)
+          throw error
+        }),
       )
-      .subscribe()
+      .subscribe((res) => (res ? (this.qaHistoryId = res._id) : null))
   }
 
   public onSubmitQuery() {
     this.isLoadingAnswer = true
     this._fileService
       .queryUploadedAudio(this.query)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((res) => {
-        this.answer = res.answer
-        this.qaHistory.push({ query: this.query, answer: res.answer })
-        this.query = ''
-        this.isLoadingAnswer = false
-      })
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((res) => {
+          this.answer = res.answer
+          this.qaHistory.push({ query: this.query, answer: res.answer })
+          this.query = ''
+          this.isLoadingAnswer = false
+        }),
+        switchMap(() => {
+          return this._fileService.updateQaHistory(this.qaHistoryId as string, {
+            userId: this.userId as string,
+            qa: this.qaHistory,
+            embeddingsUrl: '',
+            mediaType: 'audio',
+          })
+        }),
+        catchError((error) => {
+          console.log(error)
+          throw error
+        }),
+      )
+      .subscribe()
   }
 
   public resetComponent() {

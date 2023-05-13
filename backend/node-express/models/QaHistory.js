@@ -17,13 +17,14 @@ const qaHistorySchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  chatId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
   qa: [qaSchema],
   embeddingsUrl: {
     type: String,
+    required: true,
+  },
+  mediaType: {
+    type: String,
+    enum: ["pdf", "audio"],
     required: true,
   },
 });

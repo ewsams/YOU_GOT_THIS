@@ -104,26 +104,25 @@ export class FileService {
   }
 
   public createQaHistory(qaHistory: QaHistory): Observable<QaHistory> {
-    return this._http.post<QaHistory>(`${this.expressApiUrl}/api/qa-history/create`, qaHistory)
+    return this._http.post<QaHistory>(`${this.expressApiUrl}/api/qa-history`, qaHistory)
   }
 
   public getQaHistoryByUserId(userId: string): Observable<QaHistory[]> {
     return this._http.get<QaHistory[]>(`${this.expressApiUrl}/api/qa-history/user/${userId}`)
   }
 
-  public getQaHistoryByChatId(chatId: string): Observable<QaHistory> {
-    return this._http.get<QaHistory>(`${this.expressApiUrl}/api/qa-history/chat/${chatId}`)
-  }
-
-  public getEmbeddingsByChatId(chatId: string): Observable<any> {
-    return this._http.get<any>(`${this.expressApiUrl}/api/qa-history/embeddings/${chatId}`)
+  public getQaHistoriesByUserIdAndType(userId: string, mediaType?: string): Observable<QaHistory[]> {
+    const url = mediaType
+      ? `${this.expressApiUrl}/api/qa-history/user/${userId}/type?mediaType=${mediaType}`
+      : `${this.expressApiUrl}/api/qa-history/user/${userId}/type`
+    return this._http.get<QaHistory[]>(url)
   }
 
   public updateQaHistory(id: string, qaHistory: QaHistory): Observable<QaHistory> {
-    return this._http.put<QaHistory>(`${this.expressApiUrl}/api/qa-history/update/${id}`, qaHistory)
+    return this._http.put<QaHistory>(`${this.expressApiUrl}/api/qa-history/${id}`, qaHistory)
   }
 
   public deleteQaHistory(id: string): Observable<any> {
-    return this._http.delete<any>(`${this.expressApiUrl}/api/qa-history/delete/${id}`)
+    return this._http.delete<any>(`${this.expressApiUrl}/api/qa-history/${id}`)
   }
 }

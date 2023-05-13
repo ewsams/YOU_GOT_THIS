@@ -1,12 +1,22 @@
 const express = require("express");
 const router = express.Router();
-const qaHistoryController = require("../controllers/qaHistoryController");
 
-router.post("/create", qaHistoryController.createQaHistory);
-router.get("/user/:userId", qaHistoryController.getQaHistoryByUserId);
-router.get("/chat/:chatId", qaHistoryController.getQaHistoryByChatId);
-router.get("/embeddings/:chat_id", qaHistoryController.getEmbeddingsByChatId);
-router.put("/update/:id", qaHistoryController.updateQaHistory);
-router.delete("/delete/:id", qaHistoryController.deleteQaHistory);
+const {
+  createQaHistory,
+  updateQaHistory,
+  deleteQaHistory,
+  getQaHistoryByUserId,
+  getQaHistoryById,
+  getEmbeddingsByQaHistoryId,
+  getQaHistoriesByUserIdAndType,
+} = require("../controllers/qaHistoryController");
+
+router.post("/", createQaHistory);
+router.put("/:id", updateQaHistory);
+router.delete("/:id", deleteQaHistory);
+router.get("/user/:userId", getQaHistoryByUserId);
+router.get("/:id", getQaHistoryById);
+router.get("/embeddings/:id", getEmbeddingsByQaHistoryId);
+router.get("/user/:userId/type", getQaHistoriesByUserIdAndType);
 
 module.exports = router;
