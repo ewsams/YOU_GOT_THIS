@@ -8,8 +8,10 @@ const qaSchema = new mongoose.Schema({
   answer: {
     type: String,
     required: true,
+   },
   },
-});
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
 
 const qaHistorySchema = new mongoose.Schema({
   userId: {
@@ -26,7 +28,9 @@ const qaHistorySchema = new mongoose.Schema({
     type: String,
     enum: ["pdf", "audio"],
     required: true,
-  },
-});
+    },
+   },
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
 
 module.exports = mongoose.model("QaHistory", qaHistorySchema);
