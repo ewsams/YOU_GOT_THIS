@@ -9,10 +9,12 @@ const {
   getQaHistoryById,
   getEmbeddingsByQaHistoryId,
   getQaHistoriesByUserIdAndType,
+  updateQaHistoryTitle
 } = require("../controllers/qaHistoryController");
 
 router.post("/", createQaHistory);
 router.put("/:id", updateQaHistory);
+router.put("/:id/title", updateQaHistoryTitle);
 router.delete("/:id", deleteQaHistory);
 router.get("/user/:userId", getQaHistoryByUserId);
 router.get("/:id", getQaHistoryById);

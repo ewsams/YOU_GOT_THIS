@@ -19,6 +19,10 @@ const qaHistorySchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  title: {
+    type: String,
+    required: true,
+  },
   qa: [qaSchema],
   embeddingsUrl: {
     type: String,

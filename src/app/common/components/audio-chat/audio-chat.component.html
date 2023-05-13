@@ -1,5 +1,9 @@
 <div class="min-h-screen flex flex-col items-center justify-start sm:py-12">
   <div class="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl sm:mx-auto">
+    <app-chat-history-sidbar
+      [userId]="userId"
+      (qaHistorySelected)="onQaHistorySelected($event)"
+    ></app-chat-history-sidbar>
     <div class="p-4 query-input w-full">
       <div
         class="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden"
@@ -18,7 +22,26 @@
         >
           Reset Chat
         </button>
-        <div class="mt-8">
+        <div class="my-2">
+          <label
+            for="title"
+            class="block text-sm font-medium"
+            [ngClass]="{
+              'text-gray-900': !(isDarkTheme$ | async),
+              'text-white': (isDarkTheme$ | async)
+            }"
+            >Title</label
+          >
+          <input
+            type="text"
+            id="title"
+            name="title"
+            [(ngModel)]="title"
+            class="mt-1 p-1 border-solid border-2 border-sky-500 block sm:text-sm rounded-md w-full"
+          />
+        </div>
+
+        <div class="mt-2">
           <button (click)="audioUpload.click()" class="bg-blue-500 w-full text-white">Select Audio</button>
           <input
             #audioUpload

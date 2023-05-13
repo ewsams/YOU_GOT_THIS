@@ -66,7 +66,7 @@ const downloadFromS3 = async (embeddingsUrl) => {
 };
 
 exports.createQaHistory = async (req, res) => {
-  const { userId, qa, embeddings, mediaType } = req.body;
+  const { userId, qa, embeddings, mediaType, title } = req.body;
 
   try {
     const user = await User.findById(userId);
@@ -81,6 +81,7 @@ exports.createQaHistory = async (req, res) => {
       qa,
       embeddingsUrl,
       mediaType,
+      title,
     });
 
     await newQaHistory.save();
@@ -94,7 +95,7 @@ exports.createQaHistory = async (req, res) => {
 
 exports.updateQaHistory = async (req, res) => {
   const { id } = req.params;
-  const { userId, qa, embeddings, mediaType } = req.body;
+  const { userId, qa, embeddings, mediaType, title } = req.body;
 
   try {
     const qaHistory = await QaHistory.findById(id);
@@ -105,6 +106,7 @@ exports.updateQaHistory = async (req, res) => {
     qaHistory.userId = userId;
     qaHistory.qa = qa;
     qaHistory.mediaType = mediaType;
+    qaHistory.title = title;
 
     if (embeddings) {
       const embeddingsUrl = await uploadToS3(embeddings);
@@ -209,5 +211,28 @@ exports.getQaHistoriesByUserIdAndType = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+exports.updateQaHistoryTitle = async (req, res) => {
+  const { id } = req.params;
+  const { title } = req.body;
+
+  try {
+    const qaHistory = await QaHistory.findById(id);
+    if (!qaHistory) {
+      return res.status(404).json({ message: "QA History not found" });
+    }
+
+    qaHistory.title = title;
+
+    await qaHistory.save();
+
+    res.status(200).json(qaHistory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 

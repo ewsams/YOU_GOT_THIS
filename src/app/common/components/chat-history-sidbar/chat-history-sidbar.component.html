@@ -1,0 +1,14 @@
+<div
+  class="qa-history-sidebar"
+  [ngClass]="{
+    'text-gray-900': !(isDarkTheme$ | async),
+    'text-white': (isDarkTheme$ | async)
+  }"
+>
+  <div *ngFor="let qaHistory of qaHistories" (click)="selectQaHistory(qaHistory)">
+    <div>{{ qaHistory.created_at | date : 'MMM d, y, h:mm a' }}</div>
+    <div class="date-container">
+      <input [(ngModel)]="qaHistory.title" (change)="updateTitle(qaHistory, qaHistory.title)" />
+    </div>
+  </div>
+</div>

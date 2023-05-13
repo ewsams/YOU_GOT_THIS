@@ -23,6 +23,7 @@ export class AudioChatComponent extends SubResolver implements OnInit {
   public embeddings: any
   public userId: string | undefined
   private qaHistoryId: string | undefined
+  public title = ''
 
   constructor(private _fileService: FileService, private _store: Store) {
     super()
@@ -52,6 +53,7 @@ export class AudioChatComponent extends SubResolver implements OnInit {
               qa: [],
               embeddingsUrl: '',
               mediaType: 'audio',
+              title: this.title as string,
             })
           } else {
             return of(undefined)
@@ -83,6 +85,7 @@ export class AudioChatComponent extends SubResolver implements OnInit {
             qa: this.qaHistory,
             embeddingsUrl: '',
             mediaType: 'audio',
+            title: this.title as string,
           })
         }),
         catchError((error) => {
@@ -105,5 +108,13 @@ export class AudioChatComponent extends SubResolver implements OnInit {
     this.userId$.subscribe((userId) => {
       this.userId = userId as string
     })
+  }
+
+  public onQaHistorySelected(qaHistory: any): void {
+    console.log(qaHistory)
+    this.qaHistory = qaHistory.qa
+    this.embeddings = qaHistory.embeddingsUrl
+    this.title = qaHistory.title
+    this.audioUploaded = true
   }
 }

@@ -125,4 +125,8 @@ export class FileService {
   public deleteQaHistory(id: string): Observable<any> {
     return this._http.delete<any>(`${this.expressApiUrl}/api/qa-history/${id}`)
   }
+
+  public updateQaHistoryTitle(id: string, data: { title: string }): Observable<QaHistory> {
+    return this._http.put<QaHistory>(`${this.expressApiUrl}/qaHistory/${id}/title`, data)
+  }
 }

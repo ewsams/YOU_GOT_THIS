@@ -6,11 +6,9 @@ import { CommonRoutingModule, routeComponents } from './common-routing.module'
 import { FooterComponent } from './components/footer/footer.component'
 import { HeaderComponent } from './components/header/header.component'
 import { PdfUploadComponent } from './components/pdf-upload/pdf-upload.component'
-import { BlogLoginComponent } from './components/blog-login/blog-login.component'
-import { PdfChatComponent } from './components/pdf-chat/pdf-chat.component'
-import { AudioChatComponent } from './components/audio-chat/audio-chat.component'
+import { ChatHistorySidbarComponent } from './components/chat-history-sidbar/chat-history-sidbar.component'
 
-const components = [HeaderComponent, FooterComponent, PdfUploadComponent]
+const components = [HeaderComponent, FooterComponent, PdfUploadComponent, ChatHistorySidbarComponent]
 
 @NgModule({
   declarations: [...components, ...routeComponents],
