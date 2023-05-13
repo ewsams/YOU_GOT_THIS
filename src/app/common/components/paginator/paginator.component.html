@@ -1,0 +1,42 @@
+<div class="flex justify-center my-4 paginator" *ngIf="currentPage">
+  <button
+    class="py-2 px-4 rounded-l"
+    [ngClass]="{
+      'cursor-not-allowed': currentPage === 1,
+      'text-gray-900': !(isDarkTheme$ | async),
+      'text-white': (isDarkTheme$ | async)
+    }"
+    [disabled]="currentPage === 1"
+    (click)="changePage(currentPage - 1)"
+  >
+    Prev
+  </button>
+  <div
+    class="hidden sm:flex py-2 px-4 mx-1 overflow-x-auto whitespace-nowrap"
+    *ngFor="let page of [].constructor(totalPages); let i = index"
+  >
+    <button
+      class="focus:outline-none mx-1"
+      [ngClass]="{
+        'font-extrabold': currentPage === i + 1,
+        'text-gray-900': !(isDarkTheme$ | async),
+        'text-white': (isDarkTheme$ | async)
+      }"
+      (click)="changePage(i + 1)"
+    >
+      {{ i + 1 }}
+    </button>
+  </div>
+  <button
+    class="py-2 px-4 rounded-r"
+    [ngClass]="{
+      'cursor-not-allowed': currentPage === totalPages,
+      'text-gray-900': !(isDarkTheme$ | async),
+      'text-white': (isDarkTheme$ | async)
+    }"
+    [disabled]="currentPage === totalPages"
+    (click)="changePage(currentPage + 1)"
+  >
+    Next
+  </button>
+</div>

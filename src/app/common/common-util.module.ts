@@ -7,8 +7,15 @@ import { FooterComponent } from './components/footer/footer.component'
 import { HeaderComponent } from './components/header/header.component'
 import { PdfUploadComponent } from './components/pdf-upload/pdf-upload.component'
 import { ChatHistorySidbarComponent } from './components/chat-history-sidbar/chat-history-sidbar.component'
+import { PaginatorComponent } from './components/paginator/paginator.component'
 
-const components = [HeaderComponent, FooterComponent, PdfUploadComponent, ChatHistorySidbarComponent]
+const components = [
+  HeaderComponent,
+  FooterComponent,
+  PdfUploadComponent,
+  ChatHistorySidbarComponent,
+  PaginatorComponent,
+]
 
 @NgModule({
   declarations: [...components, ...routeComponents],

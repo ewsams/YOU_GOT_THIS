@@ -5,10 +5,10 @@
       [userId]="userId"
       (qaHistorySelected)="onQaHistorySelected($event)"
     ></app-chat-history-sidbar>
-    <div class="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl sm:mx-auto">
+    <div class="relative py-3 sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl sm:mx-auto flex justify-center">
       <div class="p-4 query-input w-full">
         <div
-          class="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden"
+          class="p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden"
           [ngClass]="{
             'bg-gray-900': (isDarkTheme$ | async),
             'bg-white': !(isDarkTheme$ | async)

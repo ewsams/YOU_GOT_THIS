@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { PdfTokenCount } from '../models/pdf-token-count.model'
 import { environment } from 'src/environments/environment'
 import { QaHistory } from '../models/qa-history.model'
+import { UserQaHistoriesResponse } from '../models/user-qa-histories.model'
 
 @Injectable({
   providedIn: 'root',
@@ -111,11 +112,24 @@ export class FileService {
     return this._http.get<QaHistory[]>(`${this.expressApiUrl}/api/qa-history/user/${userId}`)
   }
 
-  public getQaHistoriesByUserIdAndType(userId: string, mediaType?: string): Observable<QaHistory[]> {
-    const url = mediaType
-      ? `${this.expressApiUrl}/api/qa-history/user/${userId}/type?mediaType=${mediaType}`
-      : `${this.expressApiUrl}/api/qa-history/user/${userId}/type`
-    return this._http.get<QaHistory[]>(url)
+  public getQaHistoriesByUserIdAndType(
+    userId: string,
+    mediaType?: string,
+    page?: number,
+    limit?: number,
+  ): Observable<UserQaHistoriesResponse> {
+    let url = `${this.expressApiUrl}/api/qa-history/user/${userId}/type`
+
+    const queryParams = new URLSearchParams()
+    if (mediaType) queryParams.append('mediaType', mediaType)
+    if (page) queryParams.append('page', page.toString())
+    if (limit) queryParams.append('limit', limit.toString())
+
+    if (queryParams.toString()) {
+      url += `?${queryParams.toString()}`
+    }
+
+    return this._http.get<UserQaHistoriesResponse>(url)
   }
 
   public updateQaHistory(id: string, qaHistory: QaHistory): Observable<QaHistory> {

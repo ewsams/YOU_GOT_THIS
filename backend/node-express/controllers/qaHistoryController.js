@@ -194,7 +194,7 @@ exports.getEmbeddingsByQaHistoryId = async (req, res) => {
 
 exports.getQaHistoriesByUserIdAndType = async (req, res) => {
   const { userId } = req.params;
-  const { mediaType } = req.query;
+  const { mediaType, page = 1, limit = 5 } = req.query;
 
   try {
     let query = QaHistory.find({ userId: userId });
@@ -203,9 +203,21 @@ exports.getQaHistoriesByUserIdAndType = async (req, res) => {
       query = query.where("mediaType", mediaType);
     }
 
+    const totalCount = await QaHistory.countDocuments(query);
+
+    query = query
+      .sort("-created_at")
+      .skip((parseInt(page) - 1) * parseInt(limit))
+      .limit(parseInt(limit));
+
     const qaHistories = await query.exec();
 
-    res.status(200).json(qaHistories);
+    res.status(200).json({
+      totalCount,
+      totalPages: Math.ceil(totalCount / parseInt(limit)),
+      currentPage: parseInt(page),
+      qaHistories,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
