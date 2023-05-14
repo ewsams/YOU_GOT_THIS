@@ -1,14 +1,16 @@
 <header class="body-font">
   <div
-    class="container mx-auto p-5 flex flex-col items-center md:flex-row"
+    class="container mx-auto p-5 flex items-center md:flex-row"
     [ngClass]="{
-      'justify-between': (currentUser$ | async)
+      'justify-between': (currentUser$ | async),
+      'flex-wrap': !(currentUser$ | async)
     }"
   >
-    <div class="flex items-center justify-center w-full md:w-auto">
-      <a class="flex title-font font-medium items-center md:justify-start justify-center" [routerLink]="'/home'">
+    <div class="w-full md:w-auto">
+      <a class="flex items-center title-font font-medium md:justify-start justify-center" [routerLink]="'/home'">
         <img src="assets/images-icons/you_got_this_logo.svg" alt="" />
         <span
+          *ngIf="!(currentUser$ | async)"
           class="ml-3 text-xl md:text-2xl"
           [ngClass]="{
             'text-gray-900': !(isDarkTheme$ | async),
@@ -20,22 +22,22 @@
       </a>
     </div>
     <nav
-      class="mt-4 md:mt-0 md:mx-auto md:py-1 md:pl-4 md:text-base text-center"
+      class="w-full md:mt-0 md:w-auto md:mx-auto md:py-1 md:pl-4 md:text-base text-center"
       [ngClass]="{
         'text-gray-900': !(isDarkTheme$ | async),
         'text-white': (isDarkTheme$ | async)
       }"
-      *ngIf="(currentUser$ | async) === null"
+      *ngIf="!(currentUser$ | async)"
     >
       <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/plans'">Plans</a>
       <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/about'">About Us</a>
       <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/news'">News Letter</a>
       <a class="mr-5 hover:text-blue-500 text-sm" [routerLink]="'/pdf-chat'">Try It</a>
     </nav>
-    <div class="flex items-center mt-4 md:mt-0">
+    <div class="w-full md:mt-0 md:w-auto flex justify-center md:justify-end items-center">
       <button
         (click)="toggleTheme()"
-        *ngIf="(currentUser$ | async) === null"
+        *ngIf="!(currentUser$ | async)"
         class="relative inline-block w-14 align-middle select-none"
       >
         <label for="theme-toggle" class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"></label>
@@ -45,7 +47,7 @@
           </span>
         </span>
       </button>
-      <div *ngIf="(currentUser$ | async) === null; else userSection" class="ml-4">
+      <div *ngIf="!(currentUser$ | async); else userSection" class="ml-4">
         <button
           [routerLink]="'/login'"
           [ngClass]="{
@@ -58,40 +60,63 @@
         </button>
       </div>
       <ng-template #userSection>
-        <div class="flex items-center">
-          <button (click)="toggleTheme()" class="relative inline-block w-14 align-middle select-none">
-            <label
-              for="theme-toggle"
-              class="toggle-label block overflow-hidden h-6 rounded-full cursor-pointer"
-            ></label>
-            <span class="toggle-icon absolute top-0.5 left-1.5 text-sm">
+        <div class="relative">
+          <button (click)="toggleDropdown()" class="flex items-center">
+            <img
+              *ngIf="profile$ | async as profile"
+              [src]="profile.imageUrl ? profile.imageUrl : 'assets/images-icons/default-avatar-icon.svg'"
+              alt="Avatar"
+              class="rounded-full ml-6 md:ml-8"
+              [ngClass]="{
+                'h-12 w-12 md:h-16 md:w-16 shadow-lg': profile.imageUrl,
+                'h-8 w-8 px-4 py-2': !profile.imageUrl
+              }"
+            />
+          </button>
+
+          <div
+            class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl"
+            *ngIf="isDropdownOpen"
+            [ngClass]="{
+              'bg-white text-gray-800': !(isDarkTheme$ | async),
+              'bg-gray-900 text-white': (isDarkTheme$ | async)
+            }"
+          >
+            <a [routerLink]="'/dashboard'" class="flex justify-between px-4 py-2 hover:bg-blue-700 hover:text-white">
+              Dashboard
+              <span><i class="fa-solid fa-chart-line"></i></span>
+            </a>
+            <hr class="border-b my-0" />
+            <a
+              [routerLink]="'/update-profile'"
+              class="flex justify-between px-4 py-2 hover:bg-blue-700 hover:text-white"
+            >
+              Update Profile
+              <span>
+                <i class="fa-solid fa-user"></i>
+              </span>
+            </a>
+            <hr class="border-t my-1" />
+            <button
+              (click)="toggleTheme()"
+              class="flex justify-between w-full text-left px-4 py-2 hover:bg-blue-700 hover:text-white"
+            >
+              {{ (isDarkTheme$ | async) ? 'Light Mode' : 'Dark Mode' }}
               <span>
                 {{ (isDarkTheme$ | async) ? '☀️' : '🌙' }}
               </span>
-            </span>
-          </button>
-          <button
-            (click)="signOut()"
-            [ngClass]="{
-              'text-gray-900': !(isDarkTheme$ | async),
-              'text-white': (isDarkTheme$ | async)
-            }"
-            class="px-4 py-2 rounded hover:bg-blue-700 hover:text-white"
-          >
-            Sign Out
-          </button>
-
-          <img
-            *ngIf="profile$ | async as profile"
-            [src]="profile.imageUrl ? profile.imageUrl : 'assets/images-icons/default-avatar-icon.svg'"
-            alt="Avatar"
-            class="rounded-full ml-6 md:ml-8"
-            [ngClass]="{
-              'h-12 w-12 md:h-16 md:w-16 shadow-lg': profile.imageUrl,
-              'h-8 w-8 px-4 py-2': !profile.imageUrl
-            }"
-            [routerLink]="'/dashboard'"
-          />
+            </button>
+            <hr class="border-t my-1" />
+            <button
+              (click)="signOut()"
+              class="flex justify-between w-full text-left px-4 py-2 hover:bg-blue-700 hover:text-white"
+            >
+              Sign Out
+              <span>
+                <i class="fa fa-sign-out"></i>
+              </span>
+            </button>
+          </div>
         </div>
       </ng-template>
     </div>
