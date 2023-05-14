@@ -28,17 +28,17 @@ export const routes: Routes = [
   {
     path: 'create-post',
     component: CreatePostComponent,
-    canActivate: [() => inject(BlogAdminGuard).canActivate()],
+    //canActivate: [() => inject(LoginGuard).canActivate()], [() => inject(BlogAdminGuard).canActivate()],
   },
   {
     path: 'pdf-chat',
     component: PdfChatComponent,
-    canActivate: [() => inject(LoginGuard).canActivate()],
+    //canActivate: [() => inject(LoginGuard).canActivate()], [() => inject(LoginGuard).canActivate()],
   },
   {
     path: 'audio-chat',
     component: AudioChatComponent,
-    canActivate: [() => inject(LoginGuard).canActivate()],
+    //canActivate: [() => inject(LoginGuard).canActivate()], [() => inject(LoginGuard).canActivate()],
   },
 ]
 

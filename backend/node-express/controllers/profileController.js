@@ -68,7 +68,7 @@ const deleteFromS3 = async (imageUrl) => {
 exports.createProfile = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { name, bio, location } = req.body;
+    const { firstName, lastName, bio, company, email} = req.body;
     const imageUrl = req.file ? await uploadToS3(req.file) : null;
 
     // Check if the user exists
@@ -86,10 +86,13 @@ exports.createProfile = async (req, res) => {
     // Create a new profile
     profile = new Profile({
       user: userId,
-      name,
+      firstName,
+      lastName,
       imageUrl,
       bio,
-      location,
+      company,
+      email
+     
     });
 
     // Save the new profile to the database
@@ -105,7 +108,7 @@ exports.createProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { name, bio, location } = req.body;
+    const { firstName, lastName, bio, company, email} = req.body;
     const imageUrl = req.file ? await uploadToS3(req.file) : null;
 
     const profile = await Profile.findOne({ user: userId });
@@ -119,10 +122,13 @@ exports.updateProfile = async (req, res) => {
       { user: userId },
       {
         $set: {
-          name: name || profile.name,
+          firstName: firstName || profile.firstName,
+          lastName: lastName || profile.lastName,
           imageUrl: imageUrl || profile.imageUrl,
           bio: bio || profile.bio,
-          location: location || profile.location,
+          company: company || profile.company,
+          email: email || profile.email,
+          
         },
       },
       { new: true }
@@ -134,6 +140,7 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 exports.upload = upload;
 
