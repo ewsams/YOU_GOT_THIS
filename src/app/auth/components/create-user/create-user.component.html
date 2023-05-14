@@ -1,24 +1,6 @@
-<div
-  class="min-h-screen flex justify-center py-12 px-4 sm:px-6 lg:px-8"
-  *ngIf="registerForm"
->
+<div class="min-h-screen flex justify-center py-12 px-4 sm:px-6 lg:px-8" *ngIf="registerForm">
   <div class="max-w-md w-full space-y-8">
-    <div>
-      <h2
-        class="mt-6 text-center text-3xl font-extrabold"
-        [ngClass]="{
-          'text-gray-900': !(isDarkTheme$ | async),
-          'text-white': (isDarkTheme$ | async)
-        }"
-      >
-        Register
-      </h2>
-    </div>
-    <form
-      [formGroup]="registerForm"
-      (ngSubmit)="onSubmit()"
-      class="mt-8 space-y-6"
-    >
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
       <div class="shadow-sm">
         <div>
           <label for="email-address" class="sr-only">Email address</label>
@@ -32,10 +14,7 @@
             placeholder="Email address"
           />
           <div
-            *ngIf="
-              registerForm.get('email')?.touched &&
-              registerForm.get('email')?.hasError('required')
-            "
+            *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')"
             class="text-red-500 text-sm"
           >
             This field is required.
@@ -64,10 +43,7 @@
           </div>
         </div>
         <div
-          *ngIf="
-            registerForm.get('password')?.touched &&
-            registerForm.get('password')?.hasError('required')
-          "
+          *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.hasError('required')"
           class="text-red-500 text-sm"
         >
           This field is required.
@@ -95,10 +71,7 @@
         </div>
       </div>
 
-      <div
-        *ngIf="errorMessage$ | async"
-        class="flex justify-center text-red-500 text-sm my-2"
-      >
+      <div *ngIf="errorMessage$ | async" class="flex justify-center text-red-500 text-sm my-2">
         <span>{{ errorMessage$ | async }}</span>
       </div>
 
