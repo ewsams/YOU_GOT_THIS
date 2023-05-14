@@ -27,22 +27,22 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
-    //canActivate: [() => inject(LoginGuard).canActivate()],
+    canActivate: [() => inject(LoginGuard).canActivate()],
   },
   {
     path: 'update-profile',
     component: UpdateProfileComponent,
-    //canActivate: [() => inject(LoginGuard).canActivate()],
+    canActivate: [() => inject(LoginGuard).canActivate()],
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
-    //canActivate: [() => inject(LoginGuard).canActivate()],
+    canActivate: [() => inject(LoginGuard).canActivate()],
   },
   {
     path: 'upload-pdf',
     component: PdfUploadComponent,
-    //canActivate: [() => inject(LoginGuard).canActivate()],
+    canActivate: [() => inject(LoginGuard).canActivate()],
   },
 ]
 
