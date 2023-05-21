@@ -1,20 +1,20 @@
 export interface QA {
   query: string
   answer: string
-  _id: string
-  created_at: string
-  updated_at: string
+  _id?: string
+  created_at?: string
+  updated_at?: string
 }
 
 export interface QAHistory {
-  _id: string
+  _id?: string
   userId: string
   title: string
   qa: QA[]
   embeddingsUrl: string
   mediaType: string
-  created_at: string
-  updated_at: string
+  created_at?: string
+  updated_at?: string
   __v: number
 }
 
