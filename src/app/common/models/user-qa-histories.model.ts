@@ -6,7 +6,7 @@ export interface QA {
   updated_at?: string
 }
 
-export interface QAHistory {
+export interface UpdateQAHistory {
   _id?: string
   userId: string
   title: string
@@ -15,12 +15,12 @@ export interface QAHistory {
   mediaType: string
   created_at?: string
   updated_at?: string
-  __v: number
+  __v?: number
 }
 
 export interface UserQaHistoriesResponse {
   totalCount: number
   totalPages: number
   currentPage: number
-  qaHistories: QAHistory[]
+  qaHistories: UpdateQAHistory[]
 }

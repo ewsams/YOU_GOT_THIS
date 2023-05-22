@@ -143,10 +143,8 @@ def upload_audio():
     chain = load_qa_chain(
         OpenAI(openai_api_key=OPENAI_API_KEY))
 
-    embedded_audio_summary_json = json.dumps(
-        embedded_audio_summary.index.reconstruct(0).tolist())
     return jsonify({"message": "Audio file uploaded, summarized, and embedded successfully.",
-                    "embedded_audio_summary": embedded_audio_summary_json})
+                    "embedded_audio_summary": audio_transcript})
 
 
 @application.route('/api/query-uploaded-audio', methods=['POST'])
@@ -164,22 +162,25 @@ def query_uploaded_audio():
 
 @application.route('/api/query-uploaded-embeddings-audio', methods=['POST'])
 def query_uploaded_embeddings_audio():
-    global chain, downloaded_embeddings
+    chain = load_qa_chain(
+        OpenAI(openai_api_key=OPENAI_API_KEY))
 
     data = request.get_json()
-    embeddings_url = data["embeddings_url"]
+    transcript_url = data["embeddings_url"]
     query = data["query"]
 
-    if downloaded_embeddings is None:
-        # Download the embeddings from the S3 bucket
-        response = requests.get(embeddings_url)
-        if response.status_code != 200:
-            return jsonify({"error": "Failed to download embeddings from S3."})
-        downloaded_embeddings = np.array(json.loads(response.text))
+    # Download the transcript from the S3 bucket
+    transcript_response = requests.get(transcript_url)
+    if transcript_response.status_code != 200:
+        return jsonify({"error": "Failed to download transcript from S3."})
+    transcript = transcript_response.text
 
-    uploaded_audio_embeddings = np.array([downloaded_embeddings])
+    # Embed the downloaded transcript
+    embeddings = OpenAIEmbeddings(
+        openai_api_key=OPENAI_API_KEY, model="text-embedding-ada-002", chunk_size=1000)
+    embedded_transcript = FAISS.from_texts([transcript], embeddings)
 
-    docs = FAISS.similarity_search(uploaded_audio_embeddings, query)
+    docs = embedded_transcript.similarity_search(query)
     answer = chain.run(input_documents=docs, question=query)
 
     return jsonify({"answer": answer})

@@ -45,6 +45,10 @@
         </div>
       </div>
 
+      <div *ngIf="errorMessage$ | async" class="flex justify-center text-red-500 text-sm my-2">
+        <span>{{ errorMessage$ | async }}</span>
+      </div>
+
       <div>
         <button
           (click)="onSubmit()"

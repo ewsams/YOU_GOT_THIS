@@ -20,7 +20,8 @@ export class AudioChatComponent extends SubResolver implements OnInit {
   public isLoadingAnswer = false
   public audioLoading = false
   public audioUploaded = false
-  public embeddings: any
+  public embeddings: string | undefined
+  public embeddingsUrl: string | undefined
   public userId: string | undefined
   private qaHistoryId: string | undefined
   public title = ''
@@ -51,7 +52,7 @@ export class AudioChatComponent extends SubResolver implements OnInit {
             return this._fileService.createQaHistory({
               userId: this.userId as string,
               qa: [],
-              embeddingsUrl: '',
+              embeddings: this.embeddings as string,
               mediaType: 'audio',
               title: this.title as string,
             })
@@ -69,31 +70,46 @@ export class AudioChatComponent extends SubResolver implements OnInit {
 
   public onSubmitQuery() {
     this.isLoadingAnswer = true
-    this._fileService
-      .queryUploadedAudio(this.query)
-      .pipe(
-        takeUntil(this.destroy$),
-        tap((res) => {
-          this.answer = res.answer
-          this.qaHistory.push({ query: this.query, answer: res.answer })
-          this.query = ''
-          this.isLoadingAnswer = false
-        }),
-        switchMap(() => {
-          return this._fileService.updateQaHistory(this.qaHistoryId as string, {
-            userId: this.userId as string,
-            qa: this.qaHistory,
-            embeddingsUrl: '',
-            mediaType: 'audio',
-            title: this.title as string,
-          })
-        }),
-        catchError((error) => {
-          console.log(error)
-          throw error
-        }),
-      )
-      .subscribe()
+    const url = 'https://you-got-this-ai-embeddings.s3.us-west-2.amazonaws.com/embeddings/'
+    if (this.embeddingsUrl?.includes(url)) {
+      this._fileService
+        .queryPriorUploadedAudio(this.query, this.embeddingsUrl)
+        .pipe(
+          tap((res) => {
+            this.answer = res.answer
+            this.qaHistory.push({ query: this.query, answer: res.answer })
+            this.query = ''
+            this.isLoadingAnswer = false
+          }),
+        )
+        .subscribe()
+    } else {
+      this._fileService
+        .queryUploadedAudio(this.query)
+        .pipe(
+          takeUntil(this.destroy$),
+          tap((res) => {
+            this.answer = res.answer
+            this.qaHistory.push({ query: this.query, answer: res.answer })
+            this.query = ''
+            this.isLoadingAnswer = false
+          }),
+          switchMap(() => {
+            return this._fileService.updateQaHistory(this.qaHistoryId as string, {
+              userId: this.userId as string,
+              qa: this.qaHistory,
+              embeddingsUrl: this.embeddingsUrl as string,
+              mediaType: 'audio',
+              title: this.title as string,
+            })
+          }),
+          catchError((error) => {
+            console.log(error)
+            throw error
+          }),
+        )
+        .subscribe()
+    }
   }
 
   public resetComponent() {
@@ -113,7 +129,7 @@ export class AudioChatComponent extends SubResolver implements OnInit {
   public onQaHistorySelected(qaHistory: any): void {
     console.log(qaHistory)
     this.qaHistory = qaHistory.qa
-    this.embeddings = qaHistory.embeddingsUrl
+    this.embeddingsUrl = qaHistory.embeddingsUrl
     this.title = qaHistory.title
     this.audioUploaded = true
   }

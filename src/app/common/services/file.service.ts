@@ -4,7 +4,7 @@ import { Observable } from 'rxjs'
 import { PdfTokenCount } from '../models/pdf-token-count.model'
 import { environment } from 'src/environments/environment'
 import { QaHistory } from '../models/qa-history.model'
-import { UserQaHistoriesResponse } from '../models/user-qa-histories.model'
+import { UpdateQAHistory, UserQaHistoriesResponse } from '../models/user-qa-histories.model'
 
 @Injectable({
   providedIn: 'root',
@@ -104,6 +104,14 @@ export class FileService {
     return this._http.post<any>(`${this.flaskApiUrl}/api/query-uploaded-audio`, formData)
   }
 
+  public queryPriorUploadedAudio(query: string, embeddingsUrl: string): Observable<any> {
+    const data = {
+      query,
+      embeddings_url: embeddingsUrl,
+    }
+    return this._http.post<any>(`${this.flaskApiUrl}/api/query-uploaded-embeddings-audio`, data)
+  }
+
   public createQaHistory(qaHistory: QaHistory): Observable<QaHistory> {
     return this._http.post<QaHistory>(`${this.expressApiUrl}/api/qa-history`, qaHistory)
   }
@@ -132,7 +140,7 @@ export class FileService {
     return this._http.get<UserQaHistoriesResponse>(url)
   }
 
-  public updateQaHistory(id: string, qaHistory: QaHistory): Observable<QaHistory> {
+  public updateQaHistory(id: string, qaHistory: UpdateQAHistory): Observable<QaHistory> {
     return this._http.put<QaHistory>(`${this.expressApiUrl}/api/qa-history/${id}`, qaHistory)
   }
 

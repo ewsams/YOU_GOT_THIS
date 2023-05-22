@@ -1,9 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { register, clearError } from 'src/app/store/auth/auth.actions';
-import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors';
-import { selectErrorMessage } from 'src/app/store/auth/auth.selectors';
+import { Component, OnInit, inject } from '@angular/core'
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'
+import { Store } from '@ngrx/store'
+import { register, clearError } from 'src/app/store/auth/auth.actions'
+import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors'
+import { selectErrorMessage } from 'src/app/store/auth/auth.selectors'
 
 @Component({
   selector: 'app-create-user',
@@ -11,41 +11,41 @@ import { selectErrorMessage } from 'src/app/store/auth/auth.selectors';
   styleUrls: ['./create-user.component.scss'],
 })
 export class CreateUserComponent implements OnInit {
-  public registerForm: FormGroup | undefined;
-  private _store = inject(Store);
-  public isDarkTheme$ = this._store.select(selectIsDarkTheme);
-  private _formBuilder = inject(FormBuilder);
-  public errorMessage$ = this._store.select(selectErrorMessage);
-  public showPassword = false;
-  public showConfirmPassword = false;
+  public registerForm: FormGroup | undefined
+  private _store = inject(Store)
+  public isDarkTheme$ = this._store.select(selectIsDarkTheme)
+  private _formBuilder = inject(FormBuilder)
+  public errorMessage$ = this._store.select(selectErrorMessage)
+  public showPassword = false
+  public showConfirmPassword = false
 
   ngOnInit(): void {
     this.registerForm = this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
-    });
+    })
   }
 
   onSubmit() {
     if (this.registerForm?.invalid) {
-      return;
+      return
     }
 
-    const { email, password } = this.registerForm?.value;
+    const { email, password } = this.registerForm?.value
 
-    this._store.dispatch(register({ email, password }));
+    this._store.dispatch(register({ email, password }))
   }
 
   ngOnDestroy(): void {
-    this._store.dispatch(clearError());
+    this._store.dispatch(clearError())
   }
 
   toggleShowPassword() {
-    this.showPassword = !this.showPassword;
+    this.showPassword = !this.showPassword
   }
 
   toggleShowConfirmPassword() {
-    this.showConfirmPassword = !this.showConfirmPassword;
+    this.showConfirmPassword = !this.showConfirmPassword
   }
 }

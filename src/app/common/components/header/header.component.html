@@ -75,22 +75,22 @@
           </button>
 
           <div
-            class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl"
+            class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl z-10"
             *ngIf="isDropdownOpen"
             [ngClass]="{
               'bg-white text-gray-800': !(isDarkTheme$ | async),
               'bg-gray-900 text-white': (isDarkTheme$ | async)
             }"
           >
-            <a [routerLink]="'/dashboard'" class="flex justify-between px-4 py-2 hover:bg-blue-700 hover:text-white">
+            <a
+              (click)="navigateToDashboard()"
+              class="flex justify-between px-4 py-2 hover:bg-blue-700 hover:text-white"
+            >
               Dashboard
               <span><i class="fa-solid fa-chart-line"></i></span>
             </a>
             <hr class="border-b my-0" />
-            <a
-              [routerLink]="'/update-profile'"
-              class="flex justify-between px-4 py-2 hover:bg-blue-700 hover:text-white"
-            >
+            <a (click)="navigateToProfile()" class="flex justify-between px-4 py-2 hover:bg-blue-700 hover:text-white">
               Update Profile
               <span>
                 <i class="fa-solid fa-user"></i>

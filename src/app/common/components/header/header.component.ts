@@ -8,6 +8,7 @@ import { selectProfile, selectProfileLoading, selectProfileError } from 'src/app
 import { toggleTheme } from 'src/app/store/theme/theme.actions'
 import { selectIsDarkTheme } from 'src/app/store/theme/theme.selectors'
 import { SubResolver } from '../../helpers/sub-resolver'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,7 @@ import { SubResolver } from '../../helpers/sub-resolver'
 })
 export class HeaderComponent extends SubResolver implements OnInit {
   private _store = inject(Store)
+  private _router = inject(Router)
   public profile$ = this._store.select(selectProfile)
   public userId$ = this._store.select(selectUserId)
   public currentUser$ = this._store.select(selectUser)
@@ -26,22 +28,40 @@ export class HeaderComponent extends SubResolver implements OnInit {
 
   public toggleTheme(): void {
     this._store.dispatch(toggleTheme())
+    setTimeout(() => {
+      this.toggleDropdown()
+    }, 400)
   }
 
   public signOut(): void {
     this._store.dispatch(logout())
+    setTimeout(() => {
+      this.toggleDropdown()
+    }, 400)
   }
 
   public toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen
   }
 
+  public navigateToProfile(): void {
+    this._router.navigate(['/update-profile'])
+    setTimeout(() => {
+      this.toggleDropdown()
+    }, 400)
+  }
+
+  public navigateToDashboard(): void {
+    this._router.navigate(['/dashboard'])
+    setTimeout(() => {
+      this.toggleDropdown()
+    }, 400)
+  }
+
   ngOnInit(): void {
     this.userId$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
       if (userId) {
         this._store.dispatch(getProfile({ userId }))
-      } else {
-        this.isDropdownOpen = false
       }
     })
   }
