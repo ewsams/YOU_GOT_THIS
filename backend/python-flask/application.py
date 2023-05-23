@@ -68,9 +68,9 @@ def count_tokens():
     return jsonify(token_count=token_count, cost=cost)
 
 
-@application.route('/api/embed-and-upload-pdf', methods=['POST'])
-def embed_and_upload_pdf():
-    global docsearch, chain
+@application.route('/api/upload-pdf', methods=['POST'])
+def upload_pdf():
+    global docsearch, chain, audio_transcript, embedded_audio_summary
 
     # Check if a file was uploaded
     if 'pdf_file' not in request.files:
@@ -88,6 +88,7 @@ def embed_and_upload_pdf():
             if text:
                 raw_text += text
 
+    # Create a text splitter and split the text into chunks
     text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=1000,
@@ -96,21 +97,21 @@ def embed_and_upload_pdf():
     )
     texts = text_splitter.split_text(raw_text)
 
+    # Embed the texts
     embeddings = OpenAIEmbeddings(
         openai_api_key=OPENAI_API_KEY, model="text-embedding-ada-002", chunk_size=1000)
     docsearch = FAISS.from_texts(texts, embeddings)
-    chain = load_qa_chain(
-        OpenAI(openai_api_key=OPENAI_API_KEY))
-    docsearch_json = json.dumps(docsearch.index.reconstruct(0).tolist())
-    return jsonify({"message": "PDF embedded and uploaded successfully.",
-                    "docsearch": docsearch_json})
+    chain = load_qa_chain(OpenAI(openai_api_key=OPENAI_API_KEY))
+
+    return jsonify({"message": "PDF uploaded, embedded and indexed successfully.",
+                    "embedded_pdf_summary": raw_text})
 
 
-@application.route('/api/query-embedded-pdf', methods=['POST'])
-def query_embedded_pdf():
+@application.route('/api/query-uploaded-pdf', methods=['POST'])
+def query_uploaded_pdf():
     global docsearch, chain
     if docsearch is None or chain is None:
-        return jsonify({"error": "Please embed and upload a PDF before querying."})
+        return jsonify({"error": "Please upload and embed a PDF before querying."})
 
     query = request.form.get('query')
     docs = docsearch.similarity_search(query)
@@ -134,7 +135,8 @@ def upload_audio():
 
     # Call the audio_summarizer function with a generic system prompt
     audio_transcript = audio_summarizer(
-        audio_file_path, "You are a language model good at creating summaries.")
+        audio_file_path,
+        "You are a language model that gives a very detailed response of what you are presented with. You always make sure to respond with all the important details")
 
     # Embed the audio transcript summary
     embeddings = OpenAIEmbeddings(
@@ -188,13 +190,25 @@ def query_uploaded_embeddings_audio():
 
 @application.route('/api/query-uploaded-embeddings-pdf', methods=['POST'])
 def query_uploaded_embeddings_pdf():
-    global chain
+    chain = load_qa_chain(
+        OpenAI(openai_api_key=OPENAI_API_KEY))
 
-    embeddings_json = request.get_json()
-    uploaded_pdf_embeddings = np.array([embeddings_json["embeddings"]])
+    data = request.get_json()
+    pdf_url = data["embeddings_url"]
+    query = data["query"]
 
-    query = request.form.get('query')
-    docs = FAISS.similarity_search(uploaded_pdf_embeddings, query)
+    # Download the PDF from the S3 bucket
+    pdf_response = requests.get(pdf_url)
+    if pdf_response.status_code != 200:
+        return jsonify({"error": "Failed to download PDF from S3."})
+    pdf = pdf_response.text
+
+    # Embed the downloaded PDF
+    embeddings = OpenAIEmbeddings(
+        openai_api_key=OPENAI_API_KEY, model="text-embedding-ada-002", chunk_size=1000)
+    embedded_pdf = FAISS.from_texts([pdf], embeddings)
+
+    docs = embedded_pdf.similarity_search(query)
     answer = chain.run(input_documents=docs, question=query)
 
     return jsonify({"answer": answer})

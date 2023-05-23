@@ -83,13 +83,13 @@ export class FileService {
     // Change the parameter type to File
     const formData = new FormData()
     formData.append('pdf_file', pdfFile)
-    return this._http.post<any>(`${this.flaskApiUrl}/api/embed-and-upload-pdf`, formData)
+    return this._http.post<any>(`${this.flaskApiUrl}/api/upload-pdf`, formData)
   }
 
   public queryEmbeddedPdf(query: string): Observable<any> {
     const formData = new FormData()
     formData.append('query', query)
-    return this._http.post<any>(`${this.flaskApiUrl}/api/query-embedded-pdf`, formData)
+    return this._http.post<any>(`${this.flaskApiUrl}/api/query-uploaded-pdf`, formData)
   }
 
   public uploadAudio(audioFile: File): Observable<any> {
@@ -110,6 +110,14 @@ export class FileService {
       embeddings_url: embeddingsUrl,
     }
     return this._http.post<any>(`${this.flaskApiUrl}/api/query-uploaded-embeddings-audio`, data)
+  }
+
+  public queryPriorUploadedPdf(query: string, embeddingsUrl: string): Observable<any> {
+    const data = {
+      query,
+      embeddings_url: embeddingsUrl,
+    }
+    return this._http.post<any>(`${this.flaskApiUrl}/api/query-uploaded-embeddings-pdf`, data)
   }
 
   public createQaHistory(qaHistory: QaHistory): Observable<QaHistory> {

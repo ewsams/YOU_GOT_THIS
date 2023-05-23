@@ -1,4 +1,5 @@
 <div
+  *ngIf="this.qaHistoriesArray.length"
   class="qa-history-sidebar"
   [ngClass]="{
     'text-gray-900': !(isDarkTheme$ | async),
